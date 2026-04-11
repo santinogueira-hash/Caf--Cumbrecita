@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestión — ¿Qué nos sumas a un café?</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; min-height: 100vh; }
+.app { max-width: 680px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
+h1 { font-size: 20px; font-weight: 500; color: #1a1a1a; margin: 2px 0 0; }
+.sub { font-size: 12px; color: #888; margin: 2px 0 0; }
+.accent { font-size: 11px; font-weight: 500; color: #F59E0B; text-transform: uppercase; letter-spacing: 0.08em; }
+.status { font-size: 10px; font-weight: 500; }
+.tabs { display: flex; gap: 6px; margin: 20px 0; overflow-x: auto; padding-bottom: 2px; }
+.tab { padding: 7px 14px; font-size: 13px; border-radius: 99px; cursor: pointer; white-space: nowrap; border: 0.5px solid #ddd; background: transparent; color: #888; font-family: inherit; }
+.tab.active { background: #F59E0B; color: #fff; border-color: #F59E0B; font-weight: 500; }
+.card { background: #fff; border: 0.5px solid #e5e5e5; border-radius: 16px; padding: 16px 18px; margin-bottom: 14px; }
+.metrics { display: flex; gap: 8px; margin-bottom: 12px; }
+.metric { flex: 1; border-radius: 14px; padding: 12px 14px; min-width: 0; }
+.metric .ml { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.metric .mv { font-size: 18px; font-weight: 500; color: #1a1a1a; }
+.metric .ms { font-size: 11px; color: #888; margin-top: 3px; }
+label.lbl { font-size: 11px; font-weight: 500; color: #888; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 5px; }
+input[type=number], input[type=date], select { width: 100%; padding: 8px 10px; border: 0.5px solid #ddd; border-radius: 8px; font-size: 14px; color: #1a1a1a; outline: none; font-family: inherit; background: #fff; }
+input:focus, select:focus { border-color: #aaa; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.btn { width: 100%; padding: 10px; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
+.btn-amber { background: #F59E0B; color: #fff; }
+.btn-red { background: #EF4444; color: #fff; }
+.btn-outline { background: transparent; border: 0.5px solid #ddd; color: #555; }
+.turno-btns { display: flex; gap: 6px; margin-bottom: 16px; }
+.turno-btn { flex: 1; padding: 8px 0; font-size: 12px; font-weight: 500; border: none; border-radius: 10px; cursor: pointer; position: relative; font-family: inherit; }
+.medio-box { border-radius: 12px; padding: 10px 12px; margin-bottom: 0; }
+.medio-box .ml2 { font-size: 11px; font-weight: 500; margin-bottom: 5px; }
+.medio-box input { background: transparent; border: none; border-bottom: 1.5px solid rgba(0,0,0,0.15); border-radius: 0; padding: 2px 0; font-size: 16px; font-weight: 500; width: 100%; outline: none; }
+.bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.bar-label { font-size: 12px; font-weight: 500; min-width: 60px; }
+.bar-track { flex: 1; height: 6px; background: #e5e5e5; border-radius: 99px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s; }
+.bar-val { font-size: 13px; font-weight: 500; min-width: 60px; text-align: right; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.pill { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; display: inline-block; }
+.list-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 0.5px solid #f0f0f0; }
+.list-row:last-child { border-bottom: none; }
+.del-btn { font-size: 12px; padding: 2px 8px; border: 0.5px solid #fca5a5; border-radius: 6px; background: transparent; color: #EF4444; cursor: pointer; font-family: inherit; }
+.section-title { font-size: 13px; font-weight: 500; margin-bottom: 12px; color: #1a1a1a; }
+.empty { font-size: 13px; color: #888; }
+.badge { position: absolute; top: 4px; right: 6px; font-size: 10px; }
+select[id="mes"] { width: auto; font-size: 13px; }
+.subtotal-row { background: #f5f5f0; border-radius: 10px; padding: 8px 12px; display: flex; justify-content: space-between; margin: 8px 0 12px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+    <div>
+      <p class="accent">☕ La Cumbrecita</p>
+      <h1>¿Qué nos sumas a un café?</h1>
+      <p class="sub">Gestión financiera integral</p>
+    </div>
+    <span class="status" id="status">● Conectando...</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="setTab(0,this)">☕ Caja</button>
+    <button class="tab" onclick="setTab(1,this)">📋 Gastos</button>
+    <button class="tab" onclick="setTab(2,this)">📊 Balance</button>
+    <button class="tab" onclick="setTab(3,this)">📈 Tendencias</button>
+    <button class="tab" onclick="setTab(4,this)">🗂 Historial</button>
+  </div>
+
+  <div id="tab-content"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyA0Ulhpz4X2X823w_C16duwMt6asinJPeI",
+  authDomain: "cafe-cumbrecita.firebaseapp.com",
+  projectId: "cafe-cumbrecita",
+  storageBucket: "cafe-cumbrecita.firebasestorage.app",
+  messagingSenderId: "268620258519",
+  appId: "1:268620258519:web:25cf01ff874cc3a55fe492"
+};
+
+const app = initializeApp(FIREBASE_CONFIG);
+const db = getFirestore(app);
+
+const TURNOS = ["Mañana","Almuerzo","Tarde"];
+const TURNO_COLOR = { Mañana:"#F59E0B", Almuerzo:"#EF4444", Tarde:"#8B5CF6" };
+const MEDIOS = ["Efectivo","Tarjeta","QR"];
+const MEDIO_COLOR = { Efectivo:"#10B981", Tarjeta:"#3B82F6", QR:"#F59E0B" };
+const MEDIO_ICON = { Efectivo:"💵", Tarjeta:"💳", QR:"📱" };
+const GASTO_CATS = ["Materias primas","Café especialidad","Personal","Servicios","Alquiler","Mantenimiento","Marketing","Impuestos y tasas"];
+const CAT_COLOR = { "Materias primas":"#10B981","Café especialidad":"#F59E0B","Personal":"#3B82F6","Servicios":"#8B5CF6","Alquiler":"#EF4444","Mantenimiento":"#F97316","Marketing":"#EC4899","Impuestos y tasas":"#6B7280" };
+const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+
+const fmt = n => Number(n||0).toLocaleString("es-AR",{minimumFractionDigits:0,maximumFractionDigits:0});
+const fmtD = n => Number(n||0).toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const turnoTotal = t => (t?.Efectivo||0)+(t?.Tarjeta||0)+(t?.QR||0);
+const today = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+const thisMonth = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; };
+
+let dias = {}, gastos = [], currentTab = 0;
+let cajFecha = today(), cajTurno = "Mañana", cajEditando = {}, cajForms = { Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}, Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}, Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""} };
+let mesVista = thisMonth();
+let saving = false;
+
+const setStatus = (msg,ok) => { const el=document.getElementById("status"); el.textContent="● "+msg; el.style.color=ok?"#10B981":"#EF4444"; };
+
+// realtime listeners
+onSnapshot(collection(db,"dias"), snap => {
+  dias={};
+  snap.forEach(s=>dias[s.id]=s.data());
+  setStatus("Conectado",true);
+  // sync forms with loaded data
+  const d = dias[cajFecha];
+  if(d) TURNOS.forEach(t=>{ if(d.turnos?.[t]&&!cajEditando[t]) cajForms[t]={cubiertos:d.turnos[t].cubiertos?.toString()||"",Efectivo:d.turnos[t].Efectivo?.toString()||"",Tarjeta:d.turnos[t].Tarjeta?.toString()||"",QR:d.turnos[t].QR?.toString()||""}; });
+  render();
+}, ()=>setStatus("Sin conexión",false));
+
+onSnapshot(collection(db,"gastos"), snap => {
+  gastos=[];
+  snap.forEach(s=>gastos.push({id:s.id,...s.data()}));
+  gastos.sort((a,b)=>a.fecha<b.fecha?1:-1);
+  render();
+});
+
+window.setTab = (i,el) => {
+  currentTab=i;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  render();
+};
+
+const render = () => {
+  const c = document.getElementById("tab-content");
+  if(currentTab===0) c.innerHTML = renderCaja();
+  else if(currentTab===1) c.innerHTML = renderGastos();
+  else if(currentTab===2) c.innerHTML = renderBalance();
+  else if(currentTab===3) c.innerHTML = renderTendencias();
+  else c.innerHTML = renderHistorial();
+  attachEvents();
+};
+
+// ---- CAJA ----
+const renderCaja = () => {
+  const diaAct = dias[cajFecha]||{turnos:{}};
+  const totalDia = TURNOS.reduce((s,t)=>s+turnoTotal(diaAct.turnos?.[t]),0);
+  const cubDia = TURNOS.reduce((s,t)=>s+(diaAct.turnos?.[t]?.cubiertos||0),0);
+  const medTot = {Efectivo:0,Tarjeta:0,QR:0};
+  TURNOS.forEach(t=>MEDIOS.forEach(m=>medTot[m]+=diaAct.turnos?.[t]?.[m]||0));
+
+  let html = `<div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:14px">
+      <p class="section-title" style="margin:0">Arqueo del día</p>
+      <input type="date" id="caj-fecha" value="${cajFecha}" style="margin-left:auto;width:auto;font-size:13px">
+    </div>`;
+
+  if(totalDia>0) html += `<div class="metrics">
+    ${metric("Total día","$"+fmt(totalDia),"#10B981")}
+    ${metric("Cubiertos",cubDia,"#3B82F6")}
+    ${metric("Ticket","$"+fmtD(cubDia>0?totalDia/cubDia:0),"#F59E0B")}
+  </div>`;
+
+  html += `<div class="turno-btns">
+    ${TURNOS.map(t=>{
+      const ok=diaAct.turnos?.[t]&&!cajEditando[t];
+      return `<button class="turno-btn" onclick="cajSetTurno('${t}')" style="background:${cajTurno===t?TURNO_COLOR[t]:TURNO_COLOR[t]+'18'};color:${cajTurno===t?'#fff':TURNO_COLOR[t]}">${t}${ok?'<span class="badge">✓</span>':''}</button>`;
+    }).join("")}
+  </div>`;
+
+  const t = cajTurno;
+  const tData = diaAct.turnos?.[t];
+  const guardado = tData && !cajEditando[t];
+
+  if(guardado) {
+    html += `<div class="metrics">
+      ${metric("Cubiertos",tData.cubiertos,TURNO_COLOR[t])}
+      ${metric("Total","$"+fmt(turnoTotal(tData)),TURNO_COLOR[t])}
+    </div>
+    <div class="metrics">${MEDIOS.map(m=>metric(m,"$"+fmt(tData[m]),MEDIO_COLOR[m])).join("")}</div>
+    <button class="btn btn-outline" onclick="cajEditar('${t}')">Editar turno ${t}</button>`;
+  } else {
+    const f = cajForms[t];
+    const sub = (parseFloat(f.Efectivo)||0)+(parseFloat(f.Tarjeta)||0)+(parseFloat(f.QR)||0);
+    html += `<div style="margin-bottom:12px"><label class="lbl">Cubiertos</label>
+      <input type="number" id="caj-cub" value="${f.cubiertos}" placeholder="0" style="font-size:18px"></div>
+    <label class="lbl">Ingreso por medio de pago</label>
+    <div class="grid3" style="margin-bottom:12px">
+      ${MEDIOS.map(m=>`<div class="medio-box" style="background:${MEDIO_COLOR[m]}14">
+        <div class="ml2" style="color:${MEDIO_COLOR[m]}">${MEDIO_ICON[m]} ${m}</div>
+        <input type="number" id="caj-${m}" value="${f[m]||''}" placeholder="0" oninput="cajUpdateSub()">
+      </div>`).join("")}
+    </div>
+    ${sub>0?`<div class="subtotal-row"><span style="font-size:13px;color:#888">Subtotal ${t}</span><span style="font-size:16px;font-weight:500">$${fmt(sub)}</span></div>`:''}
+    <button class="btn" style="background:${TURNO_COLOR[t]};color:#fff;margin-top:4px" onclick="cajGuardar('${t}')">${saving?'Guardando...':'Guardar turno '+t}</button>`;
+  }
+  html += `</div>`;
+
+  if(totalDia>0) html += `<div class="card"><p class="section-title">Medios de cobro — ${cajFecha}</p>
+    ${MEDIOS.map(m=>`<div class="bar-row">
+      <span class="bar-label" style="color:${MEDIO_COLOR[m]}">${MEDIO_ICON[m]} ${m}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalDia>0?(medTot[m]/totalDia*100):0}%;background:${MEDIO_COLOR[m]}"></div></div>
+      <span class="bar-val">$${fmt(medTot[m])} <span style="font-size:11px;color:#888">${totalDia>0?fmtD(medTot[m]/totalDia*100):0}%</span></span>
+    </div>`).join("")}
+  </div>`;
+
+  return html;
+};
+
+// ---- GASTOS ----
+let gForm = { fecha:today(), categoria:"Materias primas", descripcion:"", monto:"", tipo:"Variable" };
+const renderGastos = () => {
+  let html = `<div class="card"><p class="section-title">Registrar gasto</p>
+    <div class="grid2">
+      <div><label class="lbl">Fecha</label><input type="date" id="g-fecha" value="${gForm.fecha}"></div>
+      <div><label class="lbl">Tipo</label><select id="g-tipo"><option ${gForm.tipo==='Variable'?'selected':''}>Variable</option><option ${gForm.tipo==='Fijo'?'selected':''}>Fijo</option></select></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="lbl">Categoría</label><select id="g-cat">${GASTO_CATS.map(c=>`<option ${gForm.categoria===c?'selected':''}>${c}</option>`).join("")}</select></div>
+    <div style="margin-bottom:10px"><label class="lbl">Descripción</label><input type="text" id="g-desc" value="${gForm.descripcion}" placeholder="Ej: granos Ethiopia, sueldo encargada..."></div>
+    <div style="margin-bottom:14px"><label class="lbl">Monto ($)</label><input type="number" id="g-monto" value="${gForm.monto}" placeholder="0"></div>
+    <button class="btn btn-red" onclick="guardarGasto()">Guardar gasto</button>
+  </div>`;
+
+  if(gastos.length>0) {
+    html += `<div class="card"><p class="section-title">Últimos gastos</p>`;
+    gastos.slice(0,15).forEach(g=>{
+      html += `<div class="list-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="dot" style="background:${CAT_COLOR[g.categoria]||'#888'}"></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:13px;font-weight:500">${g.categoria}</span>
+              <span class="pill" style="background:${g.tipo==='Fijo'?'#3B82F622':'#10B98122'};color:${g.tipo==='Fijo'?'#3B82F6':'#10B981'}">${g.tipo}</span>
+            </div>
+            ${g.descripcion?`<p style="font-size:12px;color:#888;margin:0">${g.descripcion}</p>`:''}
+            <span style="font-size:11px;color:#aaa">${g.fecha}</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:14px;font-weight:500">$${fmt(g.monto)}</span>
+          <button class="del-btn" onclick="eliminarGasto('${g.id}')">×</button>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  return html;
+};
+
+// ---- BALANCE ----
+const renderBalance = () => {
+  const diasMes = Object.entries(dias).filter(([f])=>f.startsWith(mesVista));
+  const gastosMes = gastos.filter(g=>g.fecha.startsWith(mesVista));
+  const totalIng = diasMes.reduce((s,[,v])=>s+v.ingresos,0);
+  const totalGas = gastosMes.reduce((s,g)=>s+g.monto,0);
+  const cub={Mañana:0,Almuerzo:0,Tarde:0}, med={Efectivo:0,Tarjeta:0,QR:0};
+  diasMes.forEach(([,v])=>{ TURNOS.forEach(t=>{ cub[t]+=v.turnos?.[t]?.cubiertos||0; MEDIOS.forEach(m=>med[m]+=v.turnos?.[t]?.[m]||0); }); });
+  const totCub=TURNOS.reduce((s,t)=>s+cub[t],0);
+  const gan=totalIng-totalGas, margen=totalIng>0?(gan/totalIng)*100:0;
+  const gasF=gastosMes.filter(g=>g.tipo==="Fijo").reduce((s,g)=>s+g.monto,0);
+  const gasV=gastosMes.filter(g=>g.tipo==="Variable").reduce((s,g)=>s+g.monto,0);
+  const gasC={};
+  GASTO_CATS.forEach(c=>gasC[c]=gastosMes.filter(g=>g.categoria===c).reduce((s,g)=>s+g.monto,0));
+
+  const mesesDisp=[...new Set([...Object.keys(dias),...gastos.map(g=>g.fecha)].map(f=>f.slice(0,7)))].sort().reverse();
+  if(!mesesDisp.includes(mesVista)) mesesDisp.unshift(mesVista);
+
+  return `
+  <div style="display:flex;align-items:center;margin-bottom:14px">
+    <p style="font-size:14px;font-weight:500;margin:0">Balance</p>
+    <select id="mes" onchange="setMes(this.value)" style="margin-left:auto;width:auto;font-size:13px">
+      ${mesesDisp.map(m=>{ const [y,mo]=m.split("-"); return `<option value="${m}" ${m===mesVista?'selected':''}>${MESES[parseInt(mo)-1]} ${y}</option>`; }).join("")}
+    </select>
+  </div>
+  <div class="metrics">${metric("Ingresos","$"+fmt(totalIng),"#10B981")}${metric("Gastos","$"+fmt(totalGas),"#EF4444")}</div>
+  <div class="metrics">${metric("Ganancia","$"+fmt(gan),gan>=0?"#10B981":"#EF4444",fmtD(margen)+"% de margen")}${metric("Ticket prom.","$"+fmtD(totCub>0?totalIng/totCub:0),"#F59E0B",fmt(totCub)+" cubiertos")}</div>
+  <div class="card"><p class="section-title">Gastos fijos vs variables</p>
+    <div class="metrics">${metric("Fijos","$"+fmt(gasF),"#3B82F6")}${metric("Variables","$"+fmt(gasV),"#F97316")}</div>
+  </div>
+  <div class="card"><p class="section-title">Medios de cobro</p>
+    ${MEDIOS.map(m=>`<div class="bar-row">
+      <span class="bar-label" style="color:${MEDIO_COLOR[m]}">${MEDIO_ICON[m]} ${m}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalIng>0?med[m]/totalIng*100:0}%;background:${MEDIO_COLOR[m]}"></div></div>
+      <span class="bar-val">$${fmt(med[m])} <span style="font-size:11px;color:#888">${totalIng>0?fmtD(med[m]/totalIng*100):0}%</span></span>
+    </div>`).join("")}
+  </div>
+  <div class="card"><p class="section-title">Cubiertos por turno</p>
+    ${TURNOS.map(t=>`<div class="bar-row">
+      <span class="bar-label" style="color:${TURNO_COLOR[t]}">${t}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totCub>0?cub[t]/totCub*100:0}%;background:${TURNO_COLOR[t]}"></div></div>
+      <span class="bar-val" style="min-width:28px">${fmt(cub[t])}</span>
+    </div>`).join("")}
+  </div>
+  <div class="card"><p class="section-title">Gastos por categoría</p>
+    ${GASTO_CATS.map(c=>`<div class="bar-row">
+      <div class="dot" style="background:${CAT_COLOR[c]};flex-shrink:0"></div>
+      <span style="font-size:13px;color:#888;min-width:120px">${c}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalGas>0?gasC[c]/totalGas*100:0}%;background:${CAT_COLOR[c]}"></div></div>
+      <span class="bar-val">$${fmt(gasC[c])}</span>
+    </div>`).join("")}
+  </div>`;
+};
+
+// ---- TENDENCIAS ----
+const renderTendencias = () => {
+  const porDia = Object.entries(dias).map(([f,v])=>{ const gd=gastos.filter(g=>g.fecha===f).reduce((s,g)=>s+g.monto,0),tot=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0); return {fecha:f,ingresos:v.ingresos,ganancia:v.ingresos-gd,cubiertos:tot,ticket:tot>0?v.ingresos/tot:0}; }).sort((a,b)=>b.ganancia-a.ganancia).slice(0,5);
+  const turnoCub={Mañana:0,Almuerzo:0,Tarde:0};
+  Object.values(dias).forEach(v=>TURNOS.forEach(t=>turnoCub[t]+=v.turnos?.[t]?.cubiertos||0));
+  const maxT=Math.max(...Object.values(turnoCub),1);
+  const porMes={};
+  Object.entries(dias).forEach(([f,v])=>{ const m=f.slice(0,7); if(!porMes[m]) porMes[m]={ingresos:0,gastos:0}; porMes[m].ingresos+=v.ingresos; });
+  gastos.forEach(g=>{ const m=g.fecha.slice(0,7); if(!porMes[m]) porMes[m]={ingresos:0,gastos:0}; porMes[m].gastos+=g.monto; });
+
+  return `
+  <div class="card"><p class="section-title">Cubiertos totales por turno</p>
+    ${TURNOS.map(t=>`<div class="bar-row">
+      <span class="bar-label" style="color:${TURNO_COLOR[t]}">${t}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${maxT>0?turnoCub[t]/maxT*100:0}%;background:${TURNO_COLOR[t]}"></div></div>
+      <span class="bar-val" style="min-width:32px">${fmt(turnoCub[t])}</span>
+    </div>`).join("")}
+  </div>
+  <div class="card"><p class="section-title">Días más rentables</p>
+    ${porDia.length===0?'<p class="empty">Sin datos aún</p>':porDia.map((d,i)=>`
+    <div class="list-row">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:11px;color:#aaa;min-width:20px">#${i+1}</span>
+        <div><p style="font-size:13px;font-weight:500;margin:0">${d.fecha}</p>
+          <p style="font-size:11px;color:#888;margin:0">${d.cubiertos} cubiertos · ticket $${fmtD(d.ticket)}</p></div>
+      </div>
+      <span style="font-size:14px;font-weight:500;color:${d.ganancia>=0?'#10B981':'#EF4444'}">$${fmt(d.ganancia)}</span>
+    </div>`).join("")}
+  </div>
+  <div class="card"><p class="section-title">Evolución mensual</p>
+    ${Object.keys(porMes).length===0?'<p class="empty">Sin datos aún</p>':Object.entries(porMes).sort().reverse().map(([m,v])=>{ const [y,mo]=m.split("-"),gan=v.ingresos-v.gastos; return `
+    <div style="padding:9px 0;border-bottom:0.5px solid #f0f0f0">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500">${MESES[parseInt(mo)-1]} ${y}</span>
+        <span style="font-size:13px;font-weight:500;color:${gan>=0?'#10B981':'#EF4444'}">${gan>=0?'+':'-'}$${fmt(Math.abs(gan))}</span>
+      </div>
+      <div style="font-size:11px;color:#888;display:flex;gap:8px">
+        <span>Ing: $${fmt(v.ingresos)}</span><span>·</span><span>Gas: $${fmt(v.gastos)}</span>
+        ${v.ingresos>0?`<span>·</span><span>Margen: ${fmtD(gan/v.ingresos*100)}%</span>`:''}
+      </div>
+    </div>`; }).join("")}
+  </div>`;
+};
+
+// ---- HISTORIAL ----
+const renderHistorial = () => {
+  let html = `<div class="card"><p class="section-title">Días registrados <span class="pill" style="background:#F59E0B22;color:#F59E0B">${Object.keys(dias).length}</span></p>`;
+  if(Object.keys(dias).length===0) html+='<p class="empty">Sin días registrados</p>';
+  Object.entries(dias).sort().reverse().forEach(([f,v])=>{
+    const tot=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0);
+    const medTot={Efectivo:0,Tarjeta:0,QR:0};
+    TURNOS.forEach(t=>MEDIOS.forEach(m=>medTot[m]+=v.turnos?.[t]?.[m]||0));
+    html+=`<div style="padding:10px 0;border-bottom:0.5px solid #f0f0f0">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:13px;font-weight:500">${f}</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:14px;font-weight:500;color:#10B981">$${fmt(v.ingresos)}</span>
+          <button class="del-btn" onclick="eliminarDia('${f}')">×</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px">
+        ${TURNOS.map(t=>v.turnos?.[t]?`<span class="pill" style="background:${TURNO_COLOR[t]}22;color:${TURNO_COLOR[t]}">${t} ${v.turnos[t].cubiertos} cub. $${fmt(turnoTotal(v.turnos[t]))}</span>`:'').join("")}
+        ${MEDIOS.map(m=>medTot[m]>0?`<span class="pill" style="background:${MEDIO_COLOR[m]}22;color:${MEDIO_COLOR[m]}">${MEDIO_ICON[m]}$${fmt(medTot[m])}</span>`:'').join("")}
+      </div>
+    </div>`;
+  });
+  html+=`</div><div class="card"><p class="section-title">Gastos registrados <span class="pill" style="background:#EF444422;color:#EF4444">${gastos.length}</span></p>`;
+  if(gastos.length===0) html+='<p class="empty">Sin gastos registrados</p>';
+  gastos.forEach(g=>{
+    html+=`<div class="list-row">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="dot" style="background:${CAT_COLOR[g.categoria]||'#888'}"></div>
+        <div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:13px;font-weight:500">${g.categoria}</span>
+            <span class="pill" style="background:${g.tipo==='Fijo'?'#3B82F622':'#10B98122'};color:${g.tipo==='Fijo'?'#3B82F6':'#10B981'}">${g.tipo}</span>
+          </div>
+          ${g.descripcion?`<p style="font-size:12px;color:#888;margin:0">${g.descripcion}</p>`:''}
+          <span style="font-size:11px;color:#aaa">${g.fecha}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:14px;font-weight:500">$${fmt(g.monto)}</span>
+        <button class="del-btn" onclick="eliminarGasto('${g.id}')">×</button>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+  return html;
+};
+
+// ---- HELPERS ----
+const metric = (label,value,color,sub='') => `<div class="metric" style="background:${color}14">
+  <div class="ml" style="color:${color}">${label}</div>
+  <div class="mv">${value}</div>
+  ${sub?`<div class="ms">${sub}</div>`:''}
+</div>`;
+
+const attachEvents = () => {
+  document.getElementById("caj-fecha")?.addEventListener("change",e=>{ cajFecha=e.target.value; cajEditando={}; cajForms={Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}}; render(); });
+  ["caj-cub",...MEDIOS.map(m=>"caj-"+m)].forEach(id=>{ document.getElementById(id)?.addEventListener("input",e=>{ cajForms[cajTurno][id.replace("caj-","").replace("cub","cubiertos")]=e.target.value; }); });
+  document.getElementById("g-fecha")?.addEventListener("change",e=>gForm.fecha=e.target.value);
+  document.getElementById("g-cat")?.addEventListener("change",e=>gForm.categoria=e.target.value);
+  document.getElementById("g-tipo")?.addEventListener("change",e=>gForm.tipo=e.target.value);
+  document.getElementById("g-desc")?.addEventListener("input",e=>gForm.descripcion=e.target.value);
+  document.getElementById("g-monto")?.addEventListener("input",e=>gForm.monto=e.target.value);
+};
+
+window.cajSetTurno = t => { cajTurno=t; cajEditando[t]=false; render(); };
+window.cajEditar = t => { cajEditando[t]=true; const d=dias[cajFecha]?.turnos?.[t]; if(d) cajForms[t]={cubiertos:d.cubiertos?.toString()||"",Efectivo:d.Efectivo?.toString()||"",Tarjeta:d.Tarjeta?.toString()||"",QR:d.QR?.toString()||""}; render(); };
+window.cajUpdateSub = () => render();
+
+window.cajGuardar = async (turno) => {
+  saving=true; render();
+  const f=cajForms[turno];
+  const turnoData={cubiertos:parseInt(f.cubiertos)||0,Efectivo:parseFloat(f.Efectivo)||0,Tarjeta:parseFloat(f.Tarjeta)||0,QR:parseFloat(f.QR)||0};
+  const diaAct=dias[cajFecha]||{turnos:{}};
+  const nuevosTurnos={...(diaAct.turnos||{}),[turno]:turnoData};
+  const ingresos=TURNOS.reduce((s,t)=>s+turnoTotal(nuevosTurnos[t]),0);
+  await setDoc(doc(db,"dias",cajFecha),{ingresos,turnos:nuevosTurnos,updatedAt:new Date().toISOString()});
+  cajEditando[turno]=false; saving=false; render();
+};
+
+window.guardarGasto = async () => {
+  const monto=parseFloat(document.getElementById("g-monto")?.value)||0;
+  const fecha=document.getElementById("g-fecha")?.value||today();
+  const categoria=document.getElementById("g-cat")?.value||"Materias primas";
+  const descripcion=document.getElementById("g-desc")?.value||"";
+  const tipo=document.getElementById("g-tipo")?.value||"Variable";
+  if(!monto) return;
+  const id=`${fecha}_${Date.now()}`;
+  await setDoc(doc(db,"gastos",id),{fecha,categoria,descripcion,monto,tipo,createdAt:new Date().toISOString()});
+  gForm={...gForm,descripcion:"",monto:""};
+  render();
+};
+
+window.eliminarGasto = async id => { await deleteDoc(doc(db,"gastos",id)); };
+window.eliminarDia = async f => { await deleteDoc(doc(db,"dias",f)); };
+window.setMes = m => { mesVista=m; render(); };
+
+render();
+</script>
+</body>
+</html>
