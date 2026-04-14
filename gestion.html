@@ -2,88 +2,66 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>¿Qué nos sumas a un café?</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EINKAFFEE — La Cumbrecita</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;min-height:100vh;}
-.app{max-width:680px;margin:0 auto;padding:1.25rem 1rem 4rem;}
-h1{font-size:20px;font-weight:500;color:#1a1a1a;}
-.accent{font-size:11px;font-weight:500;color:#F59E0B;text-transform:uppercase;letter-spacing:.08em;}
-.sub{font-size:12px;color:#888;}
-.status{font-size:10px;font-weight:500;}
-.card{background:#fff;border:.5px solid #e5e5e5;border-radius:16px;padding:16px 18px;margin-bottom:14px;}
-.metrics{display:flex;gap:8px;margin-bottom:12px;}
-.metric{flex:1;border-radius:14px;padding:11px 13px;min-width:0;}
-.metric .ml{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}
-.metric .mv{font-size:16px;font-weight:500;color:#1a1a1a;line-height:1.2;}
-.metric .ms{font-size:10px;color:#888;margin-top:2px;}
-label.lbl{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px;}
-input[type=number],input[type=date],input[type=text],input[type=password],select,textarea{width:100%;padding:8px 10px;border:.5px solid #ddd;border-radius:8px;font-size:14px;color:#1a1a1a;outline:none;font-family:inherit;background:#fff;}
-input:focus,select:focus,textarea:focus{border-color:#aaa;}
-textarea{resize:vertical;min-height:60px;}
-.btn{width:100%;padding:10px;border:none;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}
-.btn-amber{background:#F59E0B;color:#fff;}
-.btn-red{background:#EF4444;color:#fff;}
-.btn-purple{background:#8B5CF6;color:#fff;}
-.btn-outline{background:transparent;border:.5px solid #ddd;color:#555;}
-.tabs{display:flex;gap:5px;margin:18px 0;overflow-x:auto;padding-bottom:2px;}
-.tab{padding:6px 12px;font-size:12px;border-radius:99px;cursor:pointer;white-space:nowrap;border:.5px solid #ddd;background:transparent;color:#888;font-family:inherit;}
-.tab.active{background:#F59E0B;color:#fff;border-color:#F59E0B;font-weight:500;}
-.tab.locked{opacity:.5;}
-.turno-btns{display:flex;gap:6px;margin-bottom:16px;}
-.turno-btn{flex:1;padding:8px 0;font-size:12px;font-weight:500;border:none;border-radius:10px;cursor:pointer;position:relative;font-family:inherit;}
-.badge{position:absolute;top:3px;right:5px;font-size:9px;}
-.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-.bar-track{flex:1;height:6px;background:#e5e5e5;border-radius:99px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:99px;transition:width .4s;}
-.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.pill{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;display:inline-block;white-space:nowrap;}
-.list-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:.5px solid #f0f0f0;}
-.list-row:last-child{border-bottom:none;}
-.del-btn{font-size:11px;padding:2px 7px;border:.5px solid #fca5a5;border-radius:6px;background:transparent;color:#EF4444;cursor:pointer;font-family:inherit;flex-shrink:0;}
-.stitle{font-size:13px;font-weight:500;margin-bottom:12px;color:#1a1a1a;}
-.empty{font-size:13px;color:#888;}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
-.chip{padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;cursor:pointer;border:.5px solid #ddd;background:transparent;color:#888;font-family:inherit;}
-.chip.on{border:none;color:#fff;}
-.insight{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f5f5f0;border-radius:10px;margin-bottom:8px;}
-.insight .icon{font-size:18px;}
-.insight .it{font-size:12px;font-weight:500;margin:0;}
-.insight .is{font-size:11px;color:#888;margin:0;}
-/* PIN */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:100;}
-.pin-box{background:#fff;border-radius:20px;padding:28px 24px;width:290px;text-align:center;}
-.pin-input{font-size:26px;letter-spacing:10px;text-align:center;border:.5px solid #ddd;border-radius:12px;padding:10px;width:100%;margin-bottom:8px;background:#f5f5f0;}
-/* TOAST */
-.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:500;z-index:200;white-space:nowrap;opacity:0;transition:opacity .3s;}
-.toast.show{opacity:1;}
-/* HOME */
-.home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;text-align:center;}
-.home-logo{font-size:48px;margin-bottom:16px;}
-.home-title{font-size:22px;font-weight:500;margin-bottom:4px;color:#1a1a1a;}
-.home-sub{font-size:14px;color:#888;margin-bottom:40px;}
-.home-btn{width:100%;max-width:300px;padding:16px;border-radius:14px;font-size:15px;font-weight:500;cursor:pointer;margin-bottom:12px;border:none;font-family:inherit;}
-.home-btn.owner{background:#F59E0B;color:#fff;}
-.home-btn.staff{background:#f5f5f0;color:#1a1a1a;border:.5px solid #ddd;}
-/* medio box */
-.medio-box{border-radius:12px;padding:10px 12px;}
-.medio-box .ml2{font-size:11px;font-weight:500;margin-bottom:4px;}
-.medio-box input{background:transparent;border:none;border-bottom:1.5px solid rgba(0,0,0,.15);border-radius:0;padding:2px 0;font-size:16px;font-weight:500;width:100%;outline:none;}
-/* progress bar */
-.prog-track{height:10px;background:#e5e5e5;border-radius:99px;overflow:hidden;margin-bottom:6px;}
-.prog-fill{height:100%;border-radius:99px;transition:width .4s;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;min-height:100vh;color:#1a1a1a}
+.app{max-width:680px;margin:0 auto;padding:1.25rem 1rem 4rem}
+h1,h2,h3{font-weight:500}
+input,select,button{font-family:inherit}
+input[type=number],input[type=date],input[type=text],input[type=password],input[type=month],input[type=datetime-local],select{width:100%;padding:8px 10px;border:0.5px solid #ddd;border-radius:8px;font-size:14px;color:#1a1a1a;outline:none;background:#fff}
+input:focus,select:focus{border-color:#aaa}
+.card{background:#fff;border:0.5px solid #e5e5e5;border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.metric{border-radius:14px;padding:12px 14px;flex:1;min-width:0}
+.metric .ml{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.metric .mv{font-size:17px;font-weight:500}
+.metric .ms{font-size:11px;color:#888;margin-top:3px}
+.metrics{display:flex;gap:8px;margin-bottom:12px}
+.bar-track{flex:1;height:6px;background:#e5e5e5;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width .4s}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.pill{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;display:inline-block}
+.lbl{font-size:11px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:5px}
+.btn{padding:10px;border:none;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;color:#fff}
+.btn-outline{background:transparent;border:0.5px solid #ddd;color:#555;border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer}
+.tab-btn{padding:7px 12px;font-size:12px;white-space:nowrap;border-radius:99px;cursor:pointer;border:0.5px solid #ddd;background:transparent;color:#888}
+.tab-btn.active{background:#F59E0B;color:#fff;border-color:#F59E0B;font-weight:500}
+.sub-btn{padding:6px 14px;font-size:12px;border-radius:99px;cursor:pointer;border:0.5px solid #ddd;background:transparent;color:#888;white-space:nowrap;text-transform:capitalize}
+.sub-btn.active{background:#3B82F6;color:#fff;border-color:#3B82F6;font-weight:500}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:200}
+.modal-box{background:#fff;border-radius:20px;padding:1.5rem;width:340px;max-height:90vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.modal-box h3{font-size:16px;font-weight:500;margin-bottom:14px;color:#1a1a1a}
+.list-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:.5px solid #f0f0f0}
+.list-row:last-child{border-bottom:none}
+.del-btn{font-size:12px;padding:2px 8px;border:.5px solid #fca5a5;border-radius:6px;background:transparent;color:#EF4444;cursor:pointer}
+.status{font-size:10px;font-weight:500}
+.emp-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.checkin-btn{padding:13px 24px;font-size:14px;font-weight:500;cursor:pointer;border:none;border-radius:14px;color:#fff}
+.tabs-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:20px}
+.turno-btn{flex:1;padding:8px 0;font-size:12px;font-weight:500;border:none;border-radius:10px;cursor:pointer;position:relative}
+.medio-box{border-radius:12px;padding:10px 12px}
+.medio-box .ml2{font-size:11px;font-weight:500;margin-bottom:5px}
+.medio-box input{background:transparent;border:none;border-radius:0;padding:2px 0;font-size:16px;font-weight:500;width:100%;outline:none}
+.bar-balance{margin-bottom:10px}
+.bar-balance .bl{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px}
+.bar-balance .bt{height:7px;background:#e5e5e5;border-radius:99px;overflow:hidden}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+@media print{.no-print{display:none!important}}
 </style>
 </head>
 <body>
-
-<div id="toast" class="toast"></div>
-<div id="root"></div>
+<div class="app" id="app">
+  <div style="text-align:center;padding:2rem">
+    <div style="font-size:36px">☕</div>
+    <p style="color:#F59E0B;font-size:20px;font-weight:700;letter-spacing:.15em;margin:8px 0 4px">EINKAFFEE</p>
+    <p style="color:#888;font-size:12px">Conectando...</p>
+  </div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const FB = {
   apiKey:"AIzaSyA0Ulhpz4X2X823w_C16duwMt6asinJPeI",
@@ -93,731 +71,1152 @@ const FB = {
   messagingSenderId:"268620258519",
   appId:"1:268620258519:web:25cf01ff874cc3a55fe492"
 };
-
 const app = initializeApp(FB);
 const db = getFirestore(app);
 
-// ---- CONSTANTS ----
-const PIN = "1234";
-const TURNOS = ["Mañana","Almuerzo","Tarde"];
-const TC = {Mañana:"#F59E0B",Almuerzo:"#EF4444",Tarde:"#8B5CF6"};
-const MC = ["Efectivo","Tarjeta","QR"];
-const MCC = {Efectivo:"#10B981",Tarjeta:"#3B82F6",QR:"#F59E0B"};
-const MCI = {Efectivo:"💵",Tarjeta:"💳",QR:"📱"};
-const MG = ["Efectivo","Tarjeta","Transferencia","Cheque","QR"];
-const MGC = {Efectivo:"#10B981",Tarjeta:"#3B82F6",Transferencia:"#8B5CF6",Cheque:"#F97316",QR:"#F59E0B"};
-const MR = ["Efectivo","Tarjeta","Transferencia","QR"];
-const GCATS = ["Materias primas","Café especialidad","Personal","Servicios","Alquiler","Mantenimiento","Marketing","Impuestos y tasas","Proveedores"];
-const GCC = {"Materias primas":"#10B981","Café especialidad":"#F59E0B","Personal":"#3B82F6","Servicios":"#8B5CF6","Alquiler":"#EF4444","Mantenimiento":"#F97316","Marketing":"#EC4899","Impuestos y tasas":"#6B7280","Proveedores":"#10B981"};
-const PROVS = ["Aceite de oliva","Agua","Alfajores","Baguettes","Budines","Café","Cantón de las Sierras","Centeno","Cerveza BergBräu","Cerveza Wildermann","Chucrut","Cordiez","Croissant","Don Ramón","Dulces","Especias","Fabeda","Frigorífico Nvo. Munich","Frutos Rojos","Frutos Secos","Hai","Helados","Hongos","Limonadas","Luconi","Maní","Maria Pastelería","Nachos","Odasso","Panificación de La Villa","Pasta","Pollo","Rancho Grande","Saan","Saltetto","Salsas El Taller","Santaolalla","Scons","Tortas Jorge","Tulum","Verduleria Depósito","Verduleria Punto Verde","Vifood"].sort();
-const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
-const DSEM = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+// ── CONSTANTES ────────────────────────────────────────────────────────────────
+const TURNOS=["Mañana","Almuerzo","Tarde"];
+const TURNO_COLOR={Mañana:"#F59E0B",Almuerzo:"#EF4444",Tarde:"#8B5CF6"};
+const MEDIOS=["Efectivo","Tarjeta","QR"];
+const MEDIO_COLOR={Efectivo:"#10B981",Tarjeta:"#3B82F6",QR:"#F59E0B"};
+const MEDIO_ICON={Efectivo:"💵",Tarjeta:"💳",QR:"📱"};
+const MEDIO_PAGO=["Efectivo","Transferencia"];
+const AREAS=["Salón","Cocina"];
+const AREA_COLOR={Salón:"#F59E0B",Cocina:"#EF4444"};
+const AREA_BG={Salón:"#FEF3C7",Cocina:"#FEE2E2"};
+const GASTO_CATS=["Materias primas","Café especialidad","Personal","Servicios","Alquiler","Mantenimiento","Marketing","Impuestos y tasas"];
+const CAT_COLOR={"Materias primas":"#10B981","Café especialidad":"#F59E0B","Personal":"#3B82F6","Servicios":"#8B5CF6","Alquiler":"#EF4444","Mantenimiento":"#F97316","Marketing":"#EC4899","Impuestos y tasas":"#6B7280"};
+const RETIRO_CATS=["Casa","Auto","Tarjetas de crédito","Almacén","Farmacia","Cuota alimentos","Combustible","Ropa","Salud","Educación","Entretenimiento","Otros"];
+const MESES=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const VAC_ANUALES=15, SEMANAS_ANIO=50, DIA_LIBRE=4;
+const JORNADA_REDUCIDA=["Trifon","Ceci"];
+const EMPLEADOS_INIT=[
+  ...["Ivana","Cufo","Fiona","Cande","Sofi","Mai","Mili"].map((n,i)=>({id:"e"+(i+1),nombre:n,area:"Salón",tipo:"fijo",sueldoMensual:0,valorHora:0,valorHoraExtra:0,vacaciones:[],activo:true})),
+  ...["Dalma","Dani","Trifon","Ceci","Hernando","Gustavo","Irma"].map((n,i)=>({id:"e"+(i+8),nombre:n,area:"Cocina",tipo:"fijo",sueldoMensual:0,valorHora:0,valorHoraExtra:0,vacaciones:[],activo:true})),
+];
 
-// ---- UTILS ----
-const fmt = n => Number(n||0).toLocaleString("es-AR",{minimumFractionDigits:0,maximumFractionDigits:0});
-const fmtD = n => Number(n||0).toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
-const today = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
-const thisMonth = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; };
-const tTotal = t => (parseFloat(t?.Efectivo)||0)+(parseFloat(t?.Tarjeta)||0)+(parseFloat(t?.QR)||0);
-const dsem = f => DSEM[new Date(f+"T12:00:00").getDay()];
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+const fmt=n=>Number(n||0).toLocaleString("es-AR",{minimumFractionDigits:0,maximumFractionDigits:0});
+const fmtD=n=>Number(n||0).toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const moneda=n=>"$"+Math.round(n||0).toLocaleString("es-AR");
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;};
+const thisMonth=()=>today().slice(0,7);
+const turnoTotal=t=>(t?.Efectivo||0)+(t?.Tarjeta||0)+(t?.QR||0);
+const diffH=(a,b)=>a&&b?Math.max(0,(new Date(b)-new Date(a))/3600000):0;
+const isoFecha=iso=>iso?new Date(iso).toLocaleDateString("es-AR"):"";
+const isoHora=iso=>iso?new Date(iso).toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"}):"";
+const mesLabel=ym=>{const[y,m]=ym.split("-");return new Date(y,m-1).toLocaleDateString("es-AR",{month:"long",year:"numeric"});};
+const jornadaEmp=emp=>JORNADA_REDUCIDA.includes(emp.nombre)?4:8;
+const pill=(txt,color,bg)=>`<span class="pill" style="background:${bg||color+'22'};color:${color}">${txt}</span>`;
 
-const showToast = msg => {
-  const t=document.getElementById("toast");
-  t.textContent=msg; t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),2000);
+const horasEsperadasMes=(emp,ym)=>{
+  const[y,m]=ym.split("-").map(Number),diasMes=new Date(y,m,0).getDate();
+  let diasLab=0;
+  for(let d=1;d<=diasMes;d++){if(new Date(y,m-1,d).getDay()!==DIA_LIBRE)diasLab++;}
+  const semsAprox=Math.ceil(diasMes/7),jornada=jornadaEmp(emp);
+  return Math.max(0,diasLab*jornada-semsAprox*(jornada===4?2:4));
 };
 
-// ---- STATE ----
-let screen = "home"; // home | owner | staff
-let unlocked = false;
-let currentTab = 0;
-let dias={}, gastos=[], retiros=[], tiposCambio={}, metas={}, notas={};
+const enVacaciones=(emp,fecha)=>(emp.vacaciones||[]).some(v=>fecha>=v.desde&&fecha<=v.hasta);
 
-let cajFecha=today(), cajTurno="Mañana", cajEditando={};
-let cajForms={Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}};
-let gForm={fecha:today(),categoria:"Materias primas",proveedor:"",descripcion:"",monto:"",tipo:"Variable",medio:"Efectivo",recurrente:false};
-let rForm={fecha:today(),monto:"",descripcion:"",medio:"Efectivo"};
-let mesVista=thisMonth();
-let pinTarget=null, pinVal="";
-let saving=false;
-
-// firebase listeners
-let connected = false;
-onSnapshot(collection(db,"dias"), snap=>{ dias={}; snap.forEach(s=>dias[s.id]=s.data()); connected=true; render(); }, ()=>{ connected=false; render(); });
-onSnapshot(collection(db,"gastos"), snap=>{ gastos=[]; snap.forEach(s=>gastos.push({id:s.id,...s.data()})); gastos.sort((a,b)=>a.fecha<b.fecha?1:-1); render(); });
-onSnapshot(collection(db,"retiros"), snap=>{ retiros=[]; snap.forEach(s=>retiros.push({id:s.id,...s.data()})); retiros.sort((a,b)=>a.fecha<b.fecha?1:-1); render(); });
-onSnapshot(collection(db,"meta"), snap=>{ metas={}; tiposCambio={}; notas={}; snap.forEach(s=>{ const d=s.data(); if(d.type==="meta") metas[s.id.replace("meta_","")]=d.value; if(d.type==="tc") tiposCambio[s.id.replace("tc_","")]=d.value; if(d.type==="nota") notas[s.id.replace("nota_","")]=d.value; }); render(); });
-
-// ---- FIREBASE OPS ----
-const saveDia = async (fecha, data) => { await setDoc(doc(db,"dias",fecha), data); };
-const saveGasto = async (g) => { await setDoc(doc(db,"gastos",g.id.toString()), g); };
-const saveRetiro = async (r) => { await setDoc(doc(db,"retiros",r.id.toString()), r); };
-const saveMeta = async (mes, val) => { await setDoc(doc(db,"meta","meta_"+mes), {type:"meta",value:val}); };
-const saveTC = async (mes, val) => { await setDoc(doc(db,"meta","tc_"+mes), {type:"tc",value:val}); };
-const saveNota = async (fecha, val) => { await setDoc(doc(db,"meta","nota_"+fecha), {type:"nota",value:val}); };
-const delDia = async f => { await deleteDoc(doc(db,"dias",f)); };
-const delGasto = async id => { await deleteDoc(doc(db,"gastos",id.toString())); };
-const delRetiro = async id => { await deleteDoc(doc(db,"retiros",id.toString())); };
-
-// ---- RENDER ----
-const render = () => {
-  const root = document.getElementById("root");
-  if(screen==="home") root.innerHTML = renderHome();
-  else if(screen==="staff") root.innerHTML = renderStaff();
-  else root.innerHTML = renderOwner();
-  attachEvents();
+const diasVacacionesMes=(emp,ym)=>{
+  const[y,m]=ym.split("-").map(Number),p1=new Date(y,m-1,1),p2=new Date(y,m,0);let c=0;
+  (emp.vacaciones||[]).forEach(v=>{const d=new Date(Math.max(new Date(v.desde),p1)),h=new Date(Math.min(new Date(v.hasta),p2));if(d<=h)c+=Math.round((h-d)/86400000)+1;});return c;
+};
+const diasVacacionesAnio=(emp,anio)=>{
+  let c=0;(emp.vacaciones||[]).forEach(v=>{const d=new Date(Math.max(new Date(v.desde),new Date(`${anio}-01-01`))),h=new Date(Math.min(new Date(v.hasta),new Date(`${anio}-12-31`)));if(d<=h)c+=Math.round((h-d)/86400000)+1;});return c;
+};
+const semanasTranscurridasAnio=anio=>{
+  const hoy=new Date(),ref=hoy.getFullYear()===Number(anio)?hoy:new Date(`${anio}-12-31`);
+  return Math.min(SEMANAS_ANIO,Math.floor((ref-new Date(`${anio}-01-01`))/(7*86400000))+1);
 };
 
-// ---- HOME ----
-const renderHome = () => `
-<div class="home">
-  <div class="home-logo">☕</div>
-  <h1 class="home-title">¿Qué nos sumas a un café?</h1>
-  <p class="home-sub">La Cumbrecita</p>
-  <button class="home-btn owner" onclick="goOwner()">🔐 Santiago</button>
-  <button class="home-btn staff" onclick="goStaff()">👩‍💼 Encargada</button>
-  <p style="font-size:11px;color:#aaa;margin-top:20px">● ${connected?"Conectado":"Conectando..."}</p>
+const resumenMes=(emp,registros,mes)=>{
+  const regs=registros.filter(r=>r.empId===emp.id&&r.fecha?.startsWith(mes));
+  const turnos=regs.filter(r=>r.tipo==="turno"&&r.salida);
+  const horas=turnos.reduce((s,r)=>s+diffH(r.entrada,r.salida),0);
+  const esperadas=horasEsperadasMes(emp,mes);
+  return{horas,esperadas,extra:Math.max(0,horas-esperadas),diasTrabajados:new Set(turnos.map(r=>r.fecha)).size,francos:regs.filter(r=>r.tipo==="franco").length,medios:regs.filter(r=>r.tipo==="medio_franco").length,faltasInj:regs.filter(r=>r.tipo==="falta_injustificada").length,faltasJust:regs.filter(r=>r.tipo==="falta_justificada").length,diasVac:diasVacacionesMes(emp,mes),turnos};
+};
+
+const saldoAcumulado=(empId,hastaYM,empleados,registros,movimientos)=>{
+  const emp=empleados.find(e=>e.id===empId);if(!emp)return 0;
+  const todos=[...registros.filter(r=>r.empId===empId&&r.fecha).map(r=>r.fecha.slice(0,7)),...movimientos.filter(m=>m.empId===empId).map(m=>m.mes)];
+  if(!todos.length)return 0;
+  let saldo=0,cur=todos.sort()[0];
+  while(cur<=hastaYM){
+    const r=resumenMes(emp,registros,cur);
+    const liq=emp.tipo==="fijo"?(emp.sueldoMensual||0)+r.extra*(emp.valorHoraExtra||0):r.horas*(emp.valorHora||0);
+    const movs=movimientos.filter(m=>m.empId===empId&&m.mes===cur);
+    saldo+=liq-movs.filter(m=>m.tipo==="adelanto").reduce((s,m)=>s+m.monto,0)-movs.filter(m=>m.tipo==="pago").reduce((s,m)=>s+m.monto,0);
+    const[y,m2]=cur.split("-").map(Number);cur=m2===12?`${y+1}-01`:`${y}-${String(m2+1).padStart(2,"0")}`;
+  }
+  return saldo;
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let STATE={
+  modo:"publico", publicTab:"checkin", adminTab:"caja", personalSubTab:"asistencia",
+  pin: localStorage.getItem("einkaffee_pin")||"1234",
+  pinInput:"", pinError:false,
+  dias:{}, gastos:[], retiros:[], empleados:[], registros:[], movimientos:[],
+  connOk:false,
+  // caja
+  cajFecha:today(), cajTurno:"Mañana", cajEditando:{}, cajForms:{Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}},
+  // gastos form
+  gForm:{fecha:today(),categoria:"Materias primas",empleadoId:"",descripcion:"",monto:"",tipo:"Variable"},
+  // retiros form
+  rForm:{fecha:today(),categoria:"Casa",descripcion:"",monto:""},
+  // personal
+  persMes:thisMonth(), persAnio:String(new Date().getFullYear()),
+  modalEmp:null, modalFalta:null, modalVac:null, modalVacDesde:"", modalVacHasta:"",
+  modalMov:null, modalMovTipo:"adelanto", modalMovMonto:"", modalMovNota:"", modalMovMedio:"Efectivo",
+  editReg:null, histEmpId:null, checkinSel:null, checkinFeedback:null,
+  // balance
+  balMes:thisMonth(),
+};
+
+const R=()=>render(document.getElementById("app"));
+
+// ── FIREBASE SAVE HELPERS ─────────────────────────────────────────────────────
+const saveDia=async(fecha,data)=>setDoc(doc(db,"dias",fecha),{...data,updatedAt:new Date().toISOString()});
+const delDia=async f=>deleteDoc(doc(db,"dias",f));
+const saveGasto=async(id,data)=>setDoc(doc(db,"gastos",String(id)),{...data});
+const delGasto=async id=>deleteDoc(doc(db,"gastos",String(id)));
+const saveRetiro=async(id,data)=>setDoc(doc(db,"retiros",String(id)),{...data});
+const delRetiro=async id=>deleteDoc(doc(db,"retiros",String(id)));
+const saveEmpleado=async(id,data)=>setDoc(doc(db,"empleados",String(id)),{...data});
+const delEmpleado=async id=>deleteDoc(doc(db,"empleados",String(id)));
+const saveRegistro=async(id,data)=>setDoc(doc(db,"registros",String(id)),{...data});
+const delRegistro=async id=>deleteDoc(doc(db,"registros",String(id)));
+const saveMovimiento=async(id,data)=>setDoc(doc(db,"movimientos",String(id)),{...data});
+const delMovimiento=async id=>deleteDoc(doc(db,"movimientos",String(id)));
+const savePin=p=>{localStorage.setItem("einkaffee_pin",p);STATE.pin=p;};
+
+// ── FIREBASE LISTENERS ────────────────────────────────────────────────────────
+const initFirebase=async()=>{
+  onSnapshot(collection(db,"dias"),snap=>{STATE.dias={};snap.forEach(s=>STATE.dias[s.id]=s.data());STATE.connOk=true;R();},()=>{STATE.connOk=false;R();});
+  onSnapshot(collection(db,"gastos"),snap=>{STATE.gastos=[];snap.forEach(s=>STATE.gastos.push({id:s.id,...s.data()}));STATE.gastos.sort((a,b)=>a.fecha<b.fecha?1:-1);R();});
+  onSnapshot(collection(db,"retiros"),snap=>{STATE.retiros=[];snap.forEach(s=>STATE.retiros.push({id:s.id,...s.data()}));STATE.retiros.sort((a,b)=>a.fecha<b.fecha?1:-1);R();});
+  onSnapshot(collection(db,"empleados"),snap=>{
+    if(snap.empty){EMPLEADOS_INIT.forEach(e=>saveEmpleado(e.id,e));STATE.empleados=[...EMPLEADOS_INIT];}
+    else{STATE.empleados=[];snap.forEach(s=>STATE.empleados.push({vacaciones:[],valorHoraExtra:0,...s.data(),id:s.id}));}
+    R();
+  });
+  onSnapshot(collection(db,"registros"),snap=>{STATE.registros=[];snap.forEach(s=>STATE.registros.push({id:s.id,...s.data()}));R();});
+  onSnapshot(collection(db,"movimientos"),snap=>{STATE.movimientos=[];snap.forEach(s=>STATE.movimientos.push({id:s.id,...s.data()}));R();});
+};
+initFirebase();
+
+// ── EVENT HANDLER ─────────────────────────────────────────────────────────────
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-action]");if(!t)return;
+  const a=t.dataset.action,v=t.dataset.val,v2=t.dataset.val2;
+
+  if(a==="set-public-tab"){STATE.publicTab=v;R();}
+  else if(a==="set-admin-tab"){STATE.adminTab=v;R();}
+  else if(a==="set-pers-subtab"){STATE.personalSubTab=v;R();}
+  else if(a==="go-login"){STATE.modo="login";STATE.pinInput="";STATE.pinError=false;R();}
+  else if(a==="go-public"){STATE.modo="publico";STATE.pinInput="";STATE.pinError=false;R();}
+  else if(a==="do-login"){
+    if(STATE.pinInput===STATE.pin){STATE.modo="admin";STATE.pinError=false;STATE.pinInput="";}
+    else{STATE.pinError=true;STATE.pinInput="";}
+    R();
+  }
+  else if(a==="pin-key"){
+    if(v==="⌫")STATE.pinInput=STATE.pinInput.slice(0,-1);
+    else if(STATE.pinInput.length<6)STATE.pinInput+=v;
+    R();
+  }
+  // CAJA
+  else if(a==="caj-set-turno"){STATE.cajTurno=v;R();}
+  else if(a==="caj-editar-turno"){STATE.cajEditando={...STATE.cajEditando,[v]:true};R();}
+  else if(a==="caj-guardar-turno"){
+    const f=STATE.cajForms[v];
+    const td={cubiertos:parseInt(f.cubiertos)||0,Efectivo:parseFloat(f.Efectivo)||0,Tarjeta:parseFloat(f.Tarjeta)||0,QR:parseFloat(f.QR)||0};
+    const diaAct=STATE.dias[STATE.cajFecha]||{turnos:{}};
+    const nt={...(diaAct.turnos||{}),[v]:td};
+    const ingresos=TURNOS.reduce((s,t2)=>s+turnoTotal(nt[t2]),0);
+    await saveDia(STATE.cajFecha,{ingresos,turnos:nt});
+    STATE.cajEditando={...STATE.cajEditando,[v]:false};R();
+  }
+  // GASTOS
+  else if(a==="guardar-gasto"){
+    const f=STATE.gForm;
+    if(!f.monto)return;
+    const id=Date.now();
+    await saveGasto(id,{...f,monto:parseFloat(f.monto)||0,id:String(id)});
+    STATE.gForm={fecha:today(),categoria:"Materias primas",empleadoId:"",descripcion:"",monto:"",tipo:"Variable"};R();
+  }
+  else if(a==="del-gasto"){await delGasto(v);R();}
+  // RETIROS
+  else if(a==="guardar-retiro"){
+    const f=STATE.rForm;if(!f.monto)return;
+    const id=Date.now();
+    await saveRetiro(id,{...f,monto:parseFloat(f.monto)||0,id:String(id)});
+    STATE.rForm={fecha:today(),categoria:"Casa",descripcion:"",monto:""};R();
+  }
+  else if(a==="del-retiro"){await delRetiro(v);R();}
+  // EMPLEADOS
+  else if(a==="open-modal-emp"){
+    const emp=v==="new"?{nombre:"",area:"Salón",tipo:"fijo",sueldoMensual:0,valorHora:0,valorHoraExtra:0,activo:true}:{...STATE.empleados.find(e=>e.id===v)};
+    STATE.modalEmp=emp;R();
+  }
+  else if(a==="close-modal-emp"){STATE.modalEmp=null;R();}
+  else if(a==="guardar-emp"){
+    const e=STATE.modalEmp;if(!e.nombre.trim())return;
+    const id=e.id||("e"+Date.now());
+    await saveEmpleado(id,{...e,id});
+    STATE.modalEmp=null;R();
+  }
+  else if(a==="toggle-activo"){
+    const emp=STATE.empleados.find(e=>e.id===v);
+    await saveEmpleado(v,{...emp,activo:!emp.activo});R();
+  }
+  // VACACIONES
+  else if(a==="open-modal-vac"){STATE.modalVac=STATE.empleados.find(e=>e.id===v);STATE.modalVacDesde="";STATE.modalVacHasta="";R();}
+  else if(a==="close-modal-vac"){STATE.modalVac=null;R();}
+  else if(a==="add-vac"){
+    if(!STATE.modalVacDesde||!STATE.modalVacHasta)return;
+    const vacs=[...(STATE.modalVac.vacaciones||[]),{id:Date.now(),desde:STATE.modalVacDesde,hasta:STATE.modalVacHasta}];
+    STATE.modalVac={...STATE.modalVac,vacaciones:vacs};R();
+  }
+  else if(a==="del-vac"){
+    STATE.modalVac={...STATE.modalVac,vacaciones:(STATE.modalVac.vacaciones||[]).filter(x=>String(x.id)!==v)};R();
+  }
+  else if(a==="guardar-vac"){
+    await saveEmpleado(STATE.modalVac.id,STATE.modalVac);STATE.modalVac=null;R();
+  }
+  // FALTA
+  else if(a==="open-modal-falta"){STATE.modalFalta=STATE.empleados.find(e=>e.id===v);R();}
+  else if(a==="close-modal-falta"){STATE.modalFalta=null;R();}
+  else if(a==="confirmar-falta"){
+    const emp=STATE.modalFalta,tipo=`falta_${v}`,hoy=today();
+    if(!STATE.registros.find(r=>r.empId===emp.id&&r.fecha===hoy&&(r.tipo==="falta_injustificada"||r.tipo==="falta_justificada"))){
+      const id=Date.now();await saveRegistro(id,{id:String(id),empId:emp.id,tipo,fecha:hoy,entrada:null,salida:null});
+    }
+    STATE.modalFalta=null;R();
+  }
+  // ASISTENCIA ADMIN
+  else if(a==="fichar-admin"){
+    const empId=v,tipo=v2,hoy=today(),now=new Date().toISOString(),id=Date.now();
+    if(tipo==="entrada"&&!STATE.registros.find(r=>r.empId===empId&&!r.salida&&r.tipo==="turno"))
+      await saveRegistro(id,{id:String(id),empId,tipo:"turno",fecha:hoy,entrada:now,salida:null});
+    else if(tipo==="salida"){const ab=[...STATE.registros].reverse().find(r=>r.empId===empId&&r.tipo==="turno"&&!r.salida);if(ab)await saveRegistro(ab.id,{...ab,salida:now});}
+    else if(!STATE.registros.find(r=>r.empId===empId&&r.fecha===hoy&&r.tipo===tipo))
+      await saveRegistro(id,{id:String(id),empId,tipo,fecha:hoy,entrada:null,salida:null});
+    R();
+  }
+  // EDITAR REGISTRO
+  else if(a==="open-edit-reg"){STATE.editReg={...STATE.registros.find(r=>r.id===v)};R();}
+  else if(a==="close-edit-reg"){STATE.editReg=null;R();}
+  else if(a==="guardar-edit-reg"){await saveRegistro(STATE.editReg.id,STATE.editReg);STATE.editReg=null;R();}
+  else if(a==="del-reg"){await delRegistro(v);R();}
+  // MOVIMIENTO
+  else if(a==="open-modal-mov"){STATE.modalMov={empId:v,mes:v2};STATE.modalMovTipo="adelanto";STATE.modalMovMonto="";STATE.modalMovNota="";STATE.modalMovMedio="Efectivo";R();}
+  else if(a==="close-modal-mov"){STATE.modalMov=null;R();}
+  else if(a==="set-mov-tipo"){STATE.modalMovTipo=v;R();}
+  else if(a==="set-mov-medio"){STATE.modalMovMedio=v;R();}
+  else if(a==="guardar-mov"){
+    if(!Number(STATE.modalMovMonto))return;
+    const id=Date.now(),emp=STATE.empleados.find(e=>e.id===STATE.modalMov.empId);
+    await saveMovimiento(id,{id:String(id),empId:STATE.modalMov.empId,mes:STATE.modalMov.mes,tipo:STATE.modalMovTipo,monto:Number(STATE.modalMovMonto),nota:STATE.modalMovNota,medioPago:STATE.modalMovMedio,fecha:today()});
+    STATE.modalMov=null;R();
+  }
+  else if(a==="del-mov"){await delMovimiento(v);R();}
+  // HISTORIAL PAGOS
+  else if(a==="set-hist-emp"){STATE.histEmpId=v==="null"?null:v;R();}
+  // CHECK-IN
+  else if(a==="checkin-sel"){STATE.checkinSel=v==="null"?null:v;R();}
+  else if(a==="checkin-fichar"){
+    const empId=STATE.checkinSel,tipo=v,hoy=today(),now=new Date().toISOString(),id=Date.now();
+    if(tipo==="entrada"&&!STATE.registros.find(r=>r.empId===empId&&!r.salida&&r.tipo==="turno"))
+      await saveRegistro(id,{id:String(id),empId,tipo:"turno",fecha:hoy,entrada:now,salida:null});
+    else if(tipo==="salida"){const ab=[...STATE.registros].reverse().find(r=>r.empId===empId&&r.tipo==="turno"&&!r.salida);if(ab)await saveRegistro(ab.id,{...ab,salida:now});}
+    else if(!STATE.registros.find(r=>r.empId===empId&&r.fecha===hoy&&r.tipo===tipo))
+      await saveRegistro(id,{id:String(id),empId,tipo,fecha:hoy,entrada:null,salida:null});
+    const nombre=STATE.empleados.find(e=>e.id===empId)?.nombre;
+    const labels={entrada:"Entrada registrada",salida:"Salida registrada",franco:"Franco registrado",medio_franco:"½ Franco registrado",falta_injustificada:"Falta registrada"};
+    STATE.checkinFeedback={nombre,label:labels[tipo]||"Registrado"};
+    STATE.checkinSel=null;
+    setTimeout(()=>{STATE.checkinFeedback=null;R();},2500);
+    R();
+  }
+  // CAJA FECHA
+  else if(a==="caj-set-fecha"){
+    STATE.cajFecha=document.getElementById("caj-fecha")?.value||today();
+    STATE.cajEditando={};
+    STATE.cajForms={Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}};
+    const d=STATE.dias[STATE.cajFecha];
+    if(d) TURNOS.forEach(t=>{if(d.turnos?.[t])STATE.cajForms[t]={cubiertos:d.turnos[t].cubiertos?.toString()||"",Efectivo:d.turnos[t].Efectivo?.toString()||"",Tarjeta:d.turnos[t].Tarjeta?.toString()||"",QR:d.turnos[t].QR?.toString()||""};});
+    R();
+  }
+  // CONFIG PIN
+  else if(a==="guardar-pin"){
+    const nuevo=document.getElementById("pin-nuevo")?.value,conf=document.getElementById("pin-confirm")?.value;
+    const msg=document.getElementById("pin-msg");
+    if(!nuevo||nuevo.length<4||!/^\d+$/.test(nuevo)){if(msg)msg.textContent="Mínimo 4 dígitos numéricos.";return;}
+    if(nuevo!==conf){if(msg)msg.textContent="Los PINs no coinciden.";return;}
+    savePin(nuevo);if(msg){msg.textContent="✓ PIN actualizado";msg.style.color="#10B981";}
+  }
+  // PERS MES/ANIO
+  else if(a==="set-pers-mes"){STATE.persMes=document.getElementById("pers-mes")?.value||thisMonth();R();}
+  else if(a==="set-pers-anio"){STATE.persAnio=document.getElementById("pers-anio")?.value||String(new Date().getFullYear());R();}
+  else if(a==="set-bal-mes"){STATE.balMes=document.getElementById("bal-mes")?.value||thisMonth();R();}
+});
+
+// Inputs en tiempo real
+document.addEventListener("input",e=>{
+  const t=e.target,a=t.dataset.bind;if(!a)return;
+  const parts=a.split(".");
+  if(parts[0]==="cajForms"&&parts.length===3)STATE.cajForms[parts[1]][parts[2]]=t.value;
+  else if(parts[0]==="gForm")STATE.gForm[parts[1]]=t.value;
+  else if(parts[0]==="rForm")STATE.rForm[parts[1]]=t.value;
+  else if(parts[0]==="modalEmp"&&STATE.modalEmp)STATE.modalEmp[parts[1]]=parts[1]==="sueldoMensual"||parts[1]==="valorHora"||parts[1]==="valorHoraExtra"?Number(t.value):t.value;
+  else if(parts[0]==="modalVacDesde")STATE.modalVacDesde=t.value;
+  else if(parts[0]==="modalVacHasta")STATE.modalVacHasta=t.value;
+  else if(parts[0]==="modalMovMonto")STATE.modalMovMonto=t.value;
+  else if(parts[0]==="modalMovNota")STATE.modalMovNota=t.value;
+  else if(parts[0]==="editReg"&&STATE.editReg)STATE.editReg[parts[1]]=t.value?new Date(t.value).toISOString():null;
+  else if(parts[0]==="pinInput")STATE.pinInput=t.value;
+  // render solo para subtotal caja
+  if(parts[0]==="cajForms")renderCajSubtotal();
+});
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function render(el){
+  if(STATE.modo==="publico")el.innerHTML=renderPublico();
+  else if(STATE.modo==="login")el.innerHTML=renderLogin();
+  else el.innerHTML=renderAdmin();
+  attachSelects();
+}
+
+function attachSelects(){
+  // Select changes (not covered by input event for select)
+  document.querySelectorAll("select[data-bind]").forEach(s=>{
+    s.addEventListener("change",e=>{
+      const parts=e.target.dataset.bind.split(".");
+      if(parts[0]==="gForm")STATE.gForm[parts[1]]=e.target.value;
+      else if(parts[0]==="rForm")STATE.rForm[parts[1]]=e.target.value;
+      else if(parts[0]==="modalEmp"&&STATE.modalEmp)STATE.modalEmp[parts[1]]=e.target.value;
+      R();
+    },{once:true});
+  });
+}
+
+const header=(admin)=>`
+<div style="text-align:center;margin-bottom:20px;position:relative">
+  <div style="font-size:36px;margin-bottom:4px">☕</div>
+  <p style="font-size:22px;font-weight:700;color:#F59E0B;text-transform:uppercase;letter-spacing:.15em;margin:0 0 4px">EINKAFFEE</p>
+  <p style="font-size:12px;color:#888;margin:0;letter-spacing:.05em">${admin?"La Cumbrecita — Admin":"La Cumbrecita"}</p>
+  ${admin?`<button data-action="go-public" class="btn-outline no-print" style="position:absolute;top:0;right:0;font-size:12px;padding:6px 12px;border-radius:8px">Salir</button>`:""}
+  <span class="status" style="display:block;margin-top:6px;color:${STATE.connOk?"#10B981":"#EF4444"}">● ${STATE.connOk?"Conectado":"Sin conexión"}</span>
 </div>`;
 
-// ---- STAFF (encargada) ----
-const renderStaff = () => {
-  const diaAct = dias[cajFecha]||{turnos:{}};
-  const totalDia = TURNOS.reduce((s,t)=>s+tTotal(diaAct.turnos?.[t]),0);
-  const cubDia = TURNOS.reduce((s,t)=>s+(diaAct.turnos?.[t]?.cubiertos||0),0);
-  const medTot = {Efectivo:0,Tarjeta:0,QR:0};
-  TURNOS.forEach(t=>MC.forEach(m=>medTot[m]+=diaAct.turnos?.[t]?.[m]||0));
-
-  let html = `<div class="app">
-  <div style="display:flex;align-items:center;margin-bottom:20px">
-    <div>
-      <p class="accent">☕ La Cumbrecita</p>
-      <h1>Arqueo de caja</h1>
-    </div>
-    <button onclick="goHome()" style="margin-left:auto;font-size:12px;padding:6px 12px;border-radius:99px;border:.5px solid #ddd;background:transparent;cursor:pointer;font-family:inherit;color:#888">← Inicio</button>
+// ── PÚBLICO ───────────────────────────────────────────────────────────────────
+function renderPublico(){
+  return `${header(false)}
+  <div style="display:flex;gap:8px;margin-bottom:20px">
+    ${[["checkin","🕐 Check-in"],["caja","☕ Caja"]].map(([k,l])=>`<button data-action="set-public-tab" data-val="${k}" class="tab-btn ${STATE.publicTab===k?"active":""}" style="flex:1;padding:10px">${l}</button>`).join("")}
   </div>
-  <div class="card">
-    <div style="display:flex;align-items:center;margin-bottom:14px">
-      <p class="stitle" style="margin:0">Día</p>
-      <input type="date" id="caj-fecha" value="${cajFecha}" style="margin-left:auto;width:auto;font-size:13px">
-    </div>`;
+  ${STATE.publicTab==="checkin"?renderCheckin():renderCaja()}
+  <div style="text-align:center;margin-top:28px">
+    <button data-action="go-login" style="font-size:12px;color:#ccc;background:none;border:none;cursor:pointer">Administración</button>
+  </div>`;
+}
 
-  if(totalDia>0) {
-    html+=`<div class="metrics">
-      ${mcard("Total día","$"+fmt(totalDia),"#10B981")}
-      ${mcard("Cubiertos",cubDia,"#3B82F6")}
-      ${mcard("Ticket","$"+fmtD(cubDia>0?totalDia/cubDia:0),"#F59E0B")}
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function renderLogin(){
+  return `<div style="min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:2rem">
+    <div style="font-size:40px">☕</div>
+    <p style="font-size:22px;font-weight:700;color:#F59E0B;letter-spacing:.15em;text-transform:uppercase;margin:0">EINKAFFEE</p>
+    <p style="font-size:13px;color:#888;margin:0">Acceso administración</p>
+    <input type="password" inputmode="numeric" placeholder="PIN" data-bind="pinInput" value="${STATE.pinInput}"
+      style="text-align:center;font-size:28px;letter-spacing:12px;width:180px;padding:12px;border:2px solid ${STATE.pinError?"#EF4444":"#ddd"};border-radius:14px;outline:none">
+    ${STATE.pinError?`<p style="font-size:13px;color:#EF4444;margin:0">PIN incorrecto</p>`:""}
+    <div style="display:flex;gap:10px">
+      <button data-action="go-public" class="btn-outline">Cancelar</button>
+      <button data-action="do-login" class="btn" style="background:#F59E0B;padding:10px 24px;font-size:14px;border-radius:12px">Entrar</button>
     </div>
-    <div class="metrics">
-      ${TURNOS.map(t=>mcard(t,diaAct.turnos?.[t]?.cubiertos||0,TC[t],"$"+fmtD(diaAct.turnos?.[t]?.cubiertos>0?tTotal(diaAct.turnos[t])/diaAct.turnos[t].cubiertos:0)+" ticket")).join("")}
+    <p style="font-size:11px;color:#ccc;margin:0">PIN por defecto: 1234</p>
+  </div>`;
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
+function renderAdmin(){
+  const TABS=["☕ Caja","📋 Gastos","💸 Retiros","👥 Personal","📊 Balance","📈 Tendencias","🗂 Historial","⚙️ Config"];
+  const KEYS=["caja","gastos","retiros","personal","balance","tendencias","historial","config"];
+  let content="";
+  if(STATE.adminTab==="caja")content=renderCaja();
+  else if(STATE.adminTab==="gastos")content=renderGastos();
+  else if(STATE.adminTab==="retiros")content=renderRetiros();
+  else if(STATE.adminTab==="personal")content=renderPersonal();
+  else if(STATE.adminTab==="balance")content=renderBalance();
+  else if(STATE.adminTab==="tendencias")content=renderTendencias();
+  else if(STATE.adminTab==="historial")content=renderHistorial();
+  else if(STATE.adminTab==="config")content=renderConfig();
+  return `${header(true)}
+  <div class="tabs-scroll no-print">
+    ${TABS.map((t,i)=>`<button data-action="set-admin-tab" data-val="${KEYS[i]}" class="tab-btn ${STATE.adminTab===KEYS[i]?"active":""}">${t}</button>`).join("")}
+  </div>
+  ${content}
+  ${renderModals()}`;
+}
+
+// ── CHECKIN ───────────────────────────────────────────────────────────────────
+function renderCheckin(){
+  const hoy=today();
+  const regsHoy=id=>STATE.registros.filter(r=>r.empId===id&&r.fecha===hoy);
+  const estaAdentro=id=>STATE.registros.some(r=>r.empId===id&&r.tipo==="turno"&&!r.salida);
+  const estadoHoy=id=>{const emp=STATE.empleados.find(e=>e.id===id);if(enVacaciones(emp,hoy))return"vacaciones";const r=regsHoy(id);if(r.some(x=>x.tipo==="franco"))return"franco";if(r.some(x=>x.tipo==="falta_injustificada"||x.tipo==="falta_justificada"))return"falta";return null;};
+  const tieneMedio=id=>regsHoy(id).some(r=>r.tipo==="medio_franco");
+
+  if(STATE.checkinFeedback){
+    const fb=STATE.checkinFeedback;
+    return `<div style="min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px">
+      <div style="width:72px;height:72px;border-radius:50%;background:#10B98122;display:flex;align-items:center;justify-content:center;font-size:32px;color:#10B981">✓</div>
+      <p style="font-size:24px;font-weight:500;margin:0">${fb.nombre}</p>
+      <p style="font-size:15px;margin:0;color:#10B981;font-weight:500">${fb.label}</p>
     </div>`;
   }
 
-  html+=`<div class="turno-btns">${TURNOS.map(t=>`<button class="turno-btn" onclick="setCajTurno('${t}')" style="background:${cajTurno===t?TC[t]:TC[t]+'18'};color:${cajTurno===t?'#fff':TC[t]}">${t}${diaAct.turnos?.[t]&&cajEditando[t]!==true?'<span class="badge">✓</span>':''}</button>`).join("")}</div>`;
+  if(STATE.checkinSel){
+    const emp=STATE.empleados.find(e=>e.id===STATE.checkinSel);
+    const dentro=estaAdentro(emp.id),hoy2=estadoHoy(emp.id),medio=tieneMedio(emp.id),enVac=hoy2==="vacaciones";
+    return `<div style="min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:1rem">
+      <div class="emp-avatar" style="width:80px;height:80px;font-size:24px;background:${dentro?"#D1FAE5":AREA_BG[emp.area]};color:${dentro?"#059669":AREA_COLOR[emp.area]}">${emp.nombre.slice(0,2).toUpperCase()}</div>
+      <p style="font-size:24px;font-weight:500;margin:0">${emp.nombre}</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+        ${pill(emp.area,AREA_COLOR[emp.area],AREA_BG[emp.area])}
+        ${medio?pill("½ Franco","#92400E","#FEF3C7"):""}
+      </div>
+      ${!enVac?`<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+        ${!dentro&&hoy2!=="franco"&&hoy2!=="falta"?`<button data-action="checkin-fichar" data-val="entrada" class="checkin-btn" style="background:#10B981">Entrada</button>`:""}
+        ${dentro?`<button data-action="checkin-fichar" data-val="salida" class="checkin-btn" style="background:#EF4444">Salida</button>`:""}
+        ${!dentro&&hoy2!=="franco"&&hoy2!=="falta"?`<button data-action="checkin-fichar" data-val="franco" class="checkin-btn" style="background:#3B82F6">Franco</button>`:""}
+        ${emp.tipo==="fijo"&&!medio?`<button data-action="checkin-fichar" data-val="medio_franco" class="checkin-btn" style="background:#F59E0B">½ Franco</button>`:""}
+        ${emp.tipo==="fijo"&&!dentro&&hoy2!=="franco"&&hoy2!=="falta"?`<button data-action="checkin-fichar" data-val="falta_injustificada" class="checkin-btn" style="background:#FEE2E2;color:#DC2626">Falta</button>`:""}
+      </div>`:"<p style='color:#7C3AED;font-weight:500'>En vacaciones</p>"}
+      <button data-action="checkin-sel" data-val="null" style="font-size:13px;color:#aaa;background:none;border:none;cursor:pointer">← Volver</button>
+    </div>`;
+  }
 
-  html += renderTurnoForm(diaAct);
-  html += `</div>`;
-
-  if(totalDia>0) html+=`<div class="card"><p class="stitle">Medios de cobro</p>
-    ${MC.map(m=>`<div class="bar-row">
-      <span style="font-size:12px;min-width:68px;color:${MCC[m]};font-weight:500">${MCI[m]} ${m}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${totalDia>0?medTot[m]/totalDia*100:0}%;background:${MCC[m]}"></div></div>
-      <span style="font-size:12px;font-weight:500;min-width:80px;text-align:right">$${fmt(medTot[m])} <span style="font-size:10px;color:#888">${totalDia>0?fmtD(medTot[m]/totalDia*100):0}%</span></span>
-    </div>`).join("")}
-  </div>`;
-
-  html+=`<div class="card"><p class="stitle">📝 Nota del día</p>
-    <textarea id="nota-dia" placeholder="Observaciones, clima, eventos...">${notas[cajFecha]||""}</textarea>
-    <button onclick="guardarNota()" class="btn btn-outline" style="margin-top:8px;width:auto;padding:6px 16px;font-size:12px">Guardar nota</button>
-  </div></div>`;
-
-  return html;
-};
-
-// ---- OWNER ----
-const renderOwner = () => {
-  const TABS_L = ["☕ Caja","📋 Gastos","💰 Retiros","📊 Balance","📈 Tendencias","🗂 Historial"];
-  const LOCKED = [false,true,true,true,true,true];
-  let html = `<div class="app">
-  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
-    <div>
-      <p class="accent">☕ La Cumbrecita</p>
-      <h1>¿Qué nos sumas a un café?</h1>
-      <p class="sub">Gestión financiera integral · <span style="color:${connected?'#10B981':'#EF4444'}">● ${connected?"Conectado":"Sin conexión"}</span></p>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-      ${unlocked?`<button onclick="lockApp()" style="font-size:11px;padding:4px 10px;border-radius:99px;border:.5px solid #ddd;background:transparent;cursor:pointer;font-family:inherit;color:#888">🔓 Bloquear</button>`:''}
-      <button onclick="goHome()" style="font-size:11px;padding:4px 10px;border-radius:99px;border:.5px solid #ddd;background:transparent;cursor:pointer;font-family:inherit;color:#888">← Inicio</button>
-    </div>
+  const now=new Date();
+  return `<div style="text-align:center;margin-bottom:24px">
+    <p style="font-size:40px;font-weight:500;margin:0">${now.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}</p>
+    <p style="font-size:13px;color:#888;margin:4px 0 0;text-transform:capitalize">${now.toLocaleDateString("es-AR",{weekday:"long",day:"numeric",month:"long"})}</p>
   </div>
-  <div class="tabs">${TABS_L.map((t,i)=>`<button class="tab ${currentTab===i?'active':''} ${LOCKED[i]&&!unlocked?'locked':''}" onclick="${LOCKED[i]&&!unlocked?`requirePin(${i})`:`setTab(${i})`}">${t}${LOCKED[i]&&!unlocked?' 🔒':''}</button>`).join("")}</div>
-  <div id="tab-content">${renderTab()}</div>
-  </div>`;
+  ${AREAS.map(area=>`
+    <div class="card">
+      <p style="font-size:12px;font-weight:500;color:${AREA_COLOR[area]};text-transform:uppercase;letter-spacing:.08em;margin:0 0 12px">${area}</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px">
+        ${STATE.empleados.filter(e=>e.area===area&&e.activo!==false).map(e=>{
+          const dentro=estaAdentro(e.id),hoy2=estadoHoy(e.id),medio=tieneMedio(e.id),enVac=hoy2==="vacaciones";
+          const bg=dentro?"#D1FAE5":hoy2==="franco"?"#DBEAFE":hoy2==="falta"?"#FEE2E2":enVac?"#EDE9FE":AREA_BG[area];
+          const border=dentro?"#6EE7B7":hoy2==="franco"?"#93C5FD":hoy2==="falta"?"#FCA5A5":enVac?"#C4B5FD":AREA_COLOR[area]+"44";
+          const txtColor=dentro?"#059669":hoy2==="franco"?"#2563EB":hoy2==="falta"?"#DC2626":enVac?"#7C3AED":AREA_COLOR[area];
+          const label=dentro?"● Trabaj.":hoy2==="franco"?"Franco":hoy2==="falta"?"Falta":enVac?"Vacac.":"Libre";
+          return `<button data-action="checkin-sel" data-val="${e.id}" style="padding:12px 8px;cursor:pointer;border-radius:14px;border:1.5px solid ${border};background:${bg};display:flex;flex-direction:column;align-items:center;gap:6px;width:100%">
+            <div class="emp-avatar" style="background:${dentro?"#6EE7B7":AREA_BG[area]};color:${dentro?"#059669":AREA_COLOR[area]}">${e.nombre.slice(0,2).toUpperCase()}</div>
+            <span style="font-size:12px;font-weight:500">${e.nombre}</span>
+            <span style="font-size:10px;color:${txtColor}">${label}</span>
+            ${medio?`<span style="font-size:10px;color:#92400E">½ Franco</span>`:""}
+          </button>`;
+        }).join("")}
+      </div>
+    </div>`).join("")}`;
+}
 
-  // PIN overlay
-  if(pinTarget!==null) html+=`<div class="overlay"><div class="pin-box">
-    <div style="font-size:30px;margin-bottom:8px">🔐</div>
-    <p style="font-size:15px;font-weight:500;margin-bottom:4px">Sección protegida</p>
-    <p style="font-size:12px;color:#888;margin-bottom:16px">Ingresá el PIN para acceder</p>
-    <input type="password" inputmode="numeric" maxlength="4" id="pin-input" class="pin-input" placeholder="••••" autofocus>
-    <p id="pin-err" style="font-size:12px;color:#EF4444;min-height:16px;margin-bottom:8px"></p>
-    <button class="btn btn-amber" onclick="checkPin()">Ingresar</button>
-    <button onclick="closePin()" style="margin-top:10px;width:100%;background:transparent;border:none;font-size:13px;color:#888;cursor:pointer;font-family:inherit">Cancelar</button>
-  </div></div>`;
-
-  return html;
-};
-
-const renderTab = () => {
-  if(currentTab===0) return renderCaja();
-  if(currentTab===1) return renderGastos();
-  if(currentTab===2) return renderRetiros();
-  if(currentTab===3) return renderBalance();
-  if(currentTab===4) return renderTendencias();
-  return renderHistorial();
-};
-
-// ---- CAJA ----
-const renderCaja = () => {
-  const diaAct=dias[cajFecha]||{turnos:{}};
-  const totalDia=TURNOS.reduce((s,t)=>s+tTotal(diaAct.turnos?.[t]),0);
+// ── CAJA ──────────────────────────────────────────────────────────────────────
+function renderCaja(){
+  const diaAct=STATE.dias[STATE.cajFecha]||{turnos:{}};
+  const turnoGuardado=t=>diaAct.turnos?.[t]&&!STATE.cajEditando[t];
+  const totalDia=TURNOS.reduce((s,t)=>s+turnoTotal(diaAct.turnos?.[t]),0);
   const cubDia=TURNOS.reduce((s,t)=>s+(diaAct.turnos?.[t]?.cubiertos||0),0);
   const medTot={Efectivo:0,Tarjeta:0,QR:0};
-  TURNOS.forEach(t=>MC.forEach(m=>medTot[m]+=diaAct.turnos?.[t]?.[m]||0));
+  TURNOS.forEach(t=>MEDIOS.forEach(m=>medTot[m]+=diaAct.turnos?.[t]?.[m]||0));
+  const t=STATE.cajTurno,f=STATE.cajForms[t];
+  const subT=(parseFloat(f.Efectivo)||0)+(parseFloat(f.Tarjeta)||0)+(parseFloat(f.QR)||0);
 
-  let html=`<div class="card">
-  <div style="display:flex;align-items:center;margin-bottom:14px">
-    <p class="stitle" style="margin:0">Arqueo del día</p>
-    <input type="date" id="caj-fecha" value="${cajFecha}" style="margin-left:auto;width:auto;font-size:13px">
-  </div>`;
-
-  if(totalDia>0) {
-    html+=`<div class="metrics">
-      ${mcard("Total día","$"+fmt(totalDia),"#10B981")}
-      ${mcard("Cubiertos",cubDia,"#3B82F6")}
-      ${mcard("Ticket","$"+fmtD(cubDia>0?totalDia/cubDia:0),"#F59E0B")}
+  return `<div class="card">
+    <div style="display:flex;align-items:center;margin-bottom:14px">
+      <p style="font-size:13px;font-weight:500;margin:0">Arqueo del día</p>
+      <input type="date" id="caj-fecha" value="${STATE.cajFecha}" onchange="document.dispatchEvent(new CustomEvent('click',{bubbles:true,detail:{action:'caj-set-fecha'}}))" data-action="caj-set-fecha" style="margin-left:auto;width:auto;font-size:13px">
     </div>
-    <div class="metrics">
-      ${TURNOS.map(t=>mcard(t,diaAct.turnos?.[t]?.cubiertos||0,TC[t],"$"+fmtD(diaAct.turnos?.[t]?.cubiertos>0?tTotal(diaAct.turnos[t])/diaAct.turnos[t].cubiertos:0)+" ticket")).join("")}
-    </div>`;
-  }
-
-  html+=`<div class="turno-btns">${TURNOS.map(t=>`<button class="turno-btn" onclick="setCajTurno('${t}')" style="background:${cajTurno===t?TC[t]:TC[t]+'18'};color:${cajTurno===t?'#fff':TC[t]}">${t}${diaAct.turnos?.[t]&&!cajEditando[t]?'<span class="badge">✓</span>':''}</button>`).join("")}</div>`;
-  html+=renderTurnoForm(diaAct);
-  html+=`</div>`;
-
-  if(totalDia>0) html+=`<div class="card"><p class="stitle">Medios de cobro — ${cajFecha}</p>
-    ${MC.map(m=>`<div class="bar-row">
-      <span style="font-size:12px;min-width:68px;color:${MCC[m]};font-weight:500">${MCI[m]} ${m}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${totalDia>0?medTot[m]/totalDia*100:0}%;background:${MCC[m]}"></div></div>
-      <span style="font-size:12px;font-weight:500;min-width:80px;text-align:right">$${fmt(medTot[m])} <span style="font-size:10px;color:#888">${totalDia>0?fmtD(medTot[m]/totalDia*100):0}%</span></span>
+    ${totalDia>0?`<div class="metrics">
+      ${metricCard("Total","$"+fmt(totalDia),"#10B981")}
+      ${metricCard("Cubiertos",cubDia,"#3B82F6")}
+      ${metricCard("Ticket","$"+fmtD(cubDia>0?totalDia/cubDia:0),"#F59E0B")}
+    </div>`:""}
+    <div style="display:flex;gap:6px;margin-bottom:16px">
+      ${TURNOS.map(tt=>`<button data-action="caj-set-turno" data-val="${tt}" class="turno-btn" style="background:${STATE.cajTurno===tt?TURNO_COLOR[tt]:TURNO_COLOR[tt]+'18'};color:${STATE.cajTurno===tt?"#fff":TURNO_COLOR[tt]}">
+        ${tt}${turnoGuardado(tt)?`<span style="position:absolute;top:4px;right:6px;font-size:10px">✓</span>`:""}
+      </button>`).join("")}
+    </div>
+    ${turnoGuardado(t)?`
+      <div class="metrics">${metricCard("Cubiertos",diaAct.turnos[t].cubiertos,TURNO_COLOR[t])}${metricCard("Total","$"+fmt(turnoTotal(diaAct.turnos[t])),TURNO_COLOR[t])}</div>
+      <div class="metrics">${MEDIOS.map(m=>metricCard(m,"$"+fmt(diaAct.turnos[t][m]),MEDIO_COLOR[m])).join("")}</div>
+      <button data-action="caj-editar-turno" data-val="${t}" style="width:100%;padding:8px;font-size:13px;border-radius:10px;cursor:pointer;color:${TURNO_COLOR[t]};border:0.5px solid ${TURNO_COLOR[t]}55;background:transparent">Editar turno ${t}</button>
+    `:`
+      <div style="margin-bottom:12px"><label class="lbl">Cubiertos</label><input type="number" data-bind="cajForms.${t}.cubiertos" value="${f.cubiertos}" placeholder="0" style="font-size:18px"></div>
+      <label class="lbl">Medio de pago</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        ${MEDIOS.map(m=>`<div class="medio-box" style="background:${MEDIO_COLOR[m]}14">
+          <div class="ml2" style="color:${MEDIO_COLOR[m]}">${MEDIO_ICON[m]} ${m}</div>
+          <input type="number" data-bind="cajForms.${t}.${m}" value="${f[m]||""}" placeholder="0" id="caj-sub-${m}" style="border-bottom:1.5px solid ${MEDIO_COLOR[m]}55">
+        </div>`).join("")}
+      </div>
+      ${subT>0?`<p style="font-size:12px;color:${TURNO_COLOR[t]};margin:0 0 10px;text-align:right">Subtotal: <strong>$${fmt(subT)}</strong></p>`:""}
+      <button data-action="caj-guardar-turno" data-val="${t}" class="btn" style="width:100%;background:${TURNO_COLOR[t]}">Guardar turno ${t}</button>
+    `}
+  </div>
+  ${totalDia>0?`<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Medios de cobro — ${STATE.cajFecha}</p>
+    ${MEDIOS.map(m=>`<div class="bar-row">
+      <span style="font-size:13px;min-width:68px">${MEDIO_ICON[m]} <span style="color:${MEDIO_COLOR[m]};font-weight:500">${m}</span></span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalDia>0?(medTot[m]/totalDia*100):0}%;background:${MEDIO_COLOR[m]}"></div></div>
+      <div style="text-align:right;min-width:90px"><span style="font-size:13px;font-weight:500">$${fmt(medTot[m])}</span> <span style="font-size:11px;color:#888">${totalDia>0?fmtD(medTot[m]/totalDia*100):0}%</span></div>
     </div>`).join("")}
-  </div>`;
+  </div>`:""}`;
+}
 
-  html+=`<div class="card"><p class="stitle">📝 Nota del día</p>
-    <textarea id="nota-dia" placeholder="Feriado, evento, clima...">${notas[cajFecha]||""}</textarea>
-    <button onclick="guardarNota()" class="btn btn-outline" style="margin-top:8px;width:auto;padding:6px 16px;font-size:12px">Guardar nota</button>
-  </div>`;
-
-  return html;
-};
-
-const renderTurnoForm = (diaAct) => {
-  const t=cajTurno, td=diaAct.turnos?.[t], guardado=td&&!cajEditando[t];
-  const f=cajForms[t];
+function renderCajSubtotal(){
+  const t=STATE.cajTurno,f=STATE.cajForms[t];
   const sub=(parseFloat(f.Efectivo)||0)+(parseFloat(f.Tarjeta)||0)+(parseFloat(f.QR)||0);
+  // update subtotal display without full re-render
+}
 
-  if(guardado) return `
-    <div class="metrics">${mcard("Cubiertos",td.cubiertos,TC[t])}${mcard("Total","$"+fmt(tTotal(td)),TC[t])}</div>
-    <div class="metrics">${MC.map(m=>mcard(m,"$"+fmt(td[m]),MCC[m])).join("")}</div>
-    <button class="btn btn-outline" onclick="editTurno('${t}')">Editar turno ${t}</button>`;
-
-  return `
-    <div style="margin-bottom:12px"><label class="lbl">Cubiertos</label>
-      <input type="number" id="caj-cub" value="${f.cubiertos}" placeholder="0" style="font-size:18px" oninput="updateCajForm('cubiertos',this.value)">
+// ── GASTOS ────────────────────────────────────────────────────────────────────
+function renderGastos(){
+  const f=STATE.gForm;
+  const empActivos=STATE.empleados.filter(e=>e.activo!==false);
+  return `<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 14px">Registrar gasto</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Fecha</label><input type="date" data-bind="gForm.fecha" value="${f.fecha}"></div>
+      <div><label class="lbl">Tipo</label><select data-bind="gForm.tipo"><option ${f.tipo==="Variable"?"selected":""}>Variable</option><option ${f.tipo==="Fijo"?"selected":""}>Fijo</option></select></div>
     </div>
-    <label class="lbl">Ingreso por medio de pago</label>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
-      ${MC.map(m=>`<div class="medio-box" style="background:${MCC[m]}14">
-        <div class="ml2" style="color:${MCC[m]}">${MCI[m]} ${m}</div>
-        <input type="number" id="caj-${m}" value="${f[m]||''}" placeholder="0" oninput="updateCajForm('${m}',this.value)">
-      </div>`).join("")}
-    </div>
-    ${sub>0?`<p style="font-size:12px;color:${TC[t]};margin:0 0 10px;text-align:right">Subtotal: <strong>$${fmt(sub)}</strong></p>`:''}
-    <button class="btn" style="background:${TC[t]};color:#fff" onclick="guardarTurno('${t}')">${saving?'Guardando...':'Guardar turno '+t}</button>`;
-};
-
-// ---- GASTOS ----
-const renderGastos = () => {
-  const esP=gForm.categoria==="Proveedores";
-  let html=`<div class="card"><p class="stitle">Registrar gasto</p>
-  <div class="grid2">
-    <div><label class="lbl">Fecha</label><input type="date" id="g-fecha" value="${gForm.fecha}"></div>
-    <div><label class="lbl">Tipo</label><select id="g-tipo"><option ${gForm.tipo==='Variable'?'selected':''}>Variable</option><option ${gForm.tipo==='Fijo'?'selected':''}>Fijo</option></select></div>
+    <div style="margin-bottom:10px"><label class="lbl">Categoría</label><select data-bind="gForm.categoria">${GASTO_CATS.map(c=>`<option ${f.categoria===c?"selected":""}>${c}</option>`).join("")}</select></div>
+    ${f.categoria==="Personal"?`<div style="margin-bottom:10px"><label class="lbl">Empleado</label><select data-bind="gForm.empleadoId"><option value="">— Seleccioná —</option>${empActivos.map(e=>`<option value="${e.id}" ${f.empleadoId==e.id?"selected":""}>${e.nombre} (${e.area})</option>`).join("")}</select></div>`:""}
+    <div style="margin-bottom:10px"><label class="lbl">Descripción</label><input type="text" data-bind="gForm.descripcion" value="${f.descripcion}" placeholder="Ej: granos Ethiopia..."></div>
+    <div style="margin-bottom:14px"><label class="lbl">Monto ($)</label><input type="number" data-bind="gForm.monto" value="${f.monto}" placeholder="0"></div>
+    <button data-action="guardar-gasto" class="btn" style="width:100%;background:#EF4444">Guardar gasto</button>
   </div>
-  <div style="margin-bottom:10px"><label class="lbl">Categoría</label>
-    <select id="g-cat" onchange="gSetCat(this.value)">${GCATS.map(c=>`<option ${gForm.categoria===c?'selected':''}>${c}</option>`).join("")}</select>
-  </div>
-  ${esP?`<div style="margin-bottom:10px"><label class="lbl">Proveedor</label>
-    <select id="g-prov"><option value="">Seleccioná...</option>${PROVS.map(p=>`<option ${gForm.proveedor===p?'selected':''}>${p}</option>`).join("")}</select>
-  </div>`:''}
-  <div style="margin-bottom:10px"><label class="lbl">Descripción</label><input type="text" id="g-desc" value="${gForm.descripcion}" placeholder="Detalle opcional..."></div>
-  <div style="margin-bottom:12px"><label class="lbl">Monto ($)</label><input type="number" id="g-monto" value="${gForm.monto}" placeholder="0"></div>
-  <label class="lbl">Medio de pago</label>
-  <div class="chips" id="g-chips">
-    ${MG.map(m=>`<button class="chip ${gForm.medio===m?'on':''}" style="${gForm.medio===m?'background:'+MGC[m]+';border-color:'+MGC[m]:''}" onclick="gSetMedio('${m}')">${m}</button>`).join("")}
-  </div>
-  <label class="lbl" style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-    <input type="checkbox" id="g-rec" ${gForm.recurrente?'checked':''} style="width:auto"> Gasto recurrente mensual
-  </label>
-  <button class="btn btn-red" onclick="guardarGasto()">Guardar gasto</button>
-  </div>`;
-
-  const recs=gastos.filter(g=>g.recurrente);
-  if(recs.length>0) html+=`<div class="card"><p class="stitle">🔁 Gastos recurrentes</p>
-    ${recs.map(g=>`<div class="list-row">
-      <div style="display:flex;align-items:center;gap:8px"><div class="dot" style="background:${GCC[g.categoria]||'#888'}"></div><span style="font-size:13px">${g.proveedor||g.descripcion||g.categoria}</span></div>
-      <span style="font-size:13px;font-weight:500">$${fmt(g.monto)}</span>
-    </div>`).join("")}
-  </div>`;
-
-  if(gastos.length>0) html+=`<div class="card"><p class="stitle">Últimos gastos</p>
-    ${gastos.slice(0,20).map(g=>`<div class="list-row">
-      <div style="display:flex;align-items:center;gap:8px;min-width:0">
-        <div class="dot" style="background:${GCC[g.categoria]||'#888'}"></div>
-        <div style="min-width:0">
-          <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
-            <span style="font-size:12px;font-weight:500">${g.categoria}</span>
-            <span class="pill" style="background:${g.tipo==='Fijo'?'#3B82F622':'#10B98122'};color:${g.tipo==='Fijo'?'#3B82F6':'#10B981'}">${g.tipo}</span>
-            ${g.medio?`<span class="pill" style="background:${MGC[g.medio]||'#888'}22;color:${MGC[g.medio]||'#888'}">${g.medio}</span>`:''}
-            ${g.recurrente?`<span class="pill" style="background:#F59E0B22;color:#F59E0B">🔁</span>`:''}
-          </div>
-          ${g.proveedor||g.descripcion?`<p style="font-size:11px;color:#888;margin:0">${g.proveedor||g.descripcion}</p>`:''}
-          <span style="font-size:10px;color:#aaa">${g.fecha}</span>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <span style="font-size:13px;font-weight:500">$${fmt(g.monto)}</span>
-        <button class="del-btn" onclick="eliminarGasto('${g.id}')">×</button>
-      </div>
-    </div>`).join("")}
-  </div>`;
-
-  return html;
-};
-
-// ---- RETIROS ----
-const renderRetiros = () => `
-<div class="card">
-  <p class="stitle">💰 Retiro de socio</p>
-  <p style="font-size:12px;color:#888;margin:-4px 0 14px">Se descuenta de la ganancia operativa, no del costo del negocio.</p>
-  <div class="grid2">
-    <div><label class="lbl">Fecha</label><input type="date" id="r-fecha" value="${rForm.fecha}"></div>
-    <div><label class="lbl">Monto ($)</label><input type="number" id="r-monto" value="${rForm.monto}" placeholder="0"></div>
-  </div>
-  <div style="margin-bottom:12px"><label class="lbl">Descripción</label><input type="text" id="r-desc" value="${rForm.descripcion}" placeholder="Opcional..."></div>
-  <label class="lbl">Medio de retiro</label>
-  <div class="chips">
-    ${MR.map(m=>`<button class="chip ${rForm.medio===m?'on':''}" style="${rForm.medio===m?'background:'+MGC[m]+';border-color:'+MGC[m]:''}" onclick="rSetMedio('${m}')">${m}</button>`).join("")}
-  </div>
-  <button class="btn btn-purple" onclick="guardarRetiro()">Registrar retiro</button>
-</div>
-${retiros.length>0?`<div class="card"><p class="stitle">Historial de retiros</p>
-  ${retiros.map(r=>`<div class="list-row">
-    <div>
-      <p style="font-size:13px;font-weight:500;margin:0">Retiro de socio</p>
-      ${r.descripcion?`<p style="font-size:11px;color:#888;margin:0">${r.descripcion}</p>`:''}
-      <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
-        ${r.medio?`<span class="pill" style="background:${MGC[r.medio]||'#888'}22;color:${MGC[r.medio]||'#888'}">${r.medio}</span>`:''}
-        <span style="font-size:10px;color:#aaa">${r.fecha}</span>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-size:14px;font-weight:500;color:#8B5CF6">$${fmt(r.monto)}</span>
-      <button class="del-btn" onclick="eliminarRetiro('${r.id}')">×</button>
-    </div>
-  </div>`).join("")}
-</div>`:''}`;
-
-// ---- BALANCE ----
-const renderBalance = () => {
-  const dm=Object.entries(dias).filter(([f])=>f.startsWith(mesVista));
-  const gm=gastos.filter(g=>g.fecha.startsWith(mesVista));
-  const rm=retiros.filter(r=>r.fecha.startsWith(mesVista));
-  const totalIng=dm.reduce((s,[,v])=>s+v.ingresos,0);
-  const totalGas=gm.reduce((s,g)=>s+g.monto,0);
-  const totalRet=rm.reduce((s,r)=>s+r.monto,0);
-  const cub={Mañana:0,Almuerzo:0,Tarde:0},med={Efectivo:0,Tarjeta:0,QR:0};
-  dm.forEach(([,v])=>{ TURNOS.forEach(t=>{ cub[t]+=v.turnos?.[t]?.cubiertos||0; MC.forEach(m=>med[m]+=v.turnos?.[t]?.[m]||0); }); });
-  const totCub=TURNOS.reduce((s,t)=>s+cub[t],0);
-  const ganOp=totalIng-totalGas, resNeto=ganOp-totalRet;
-  const margen=totalIng>0?(ganOp/totalIng)*100:0;
-  const tc=tiposCambio[mesVista]||0, meta=metas[mesVista]||0;
-  const pctMeta=meta>0?(totalIng/meta)*100:0;
-  const dc=dm.length, promCub=dc>0?totCub/dc:0;
-  const gasF=gm.filter(g=>g.tipo==="Fijo").reduce((s,g)=>s+g.monto,0);
-  const gasV=gm.filter(g=>g.tipo==="Variable").reduce((s,g)=>s+g.monto,0);
-  const gasC={}; GCATS.forEach(c=>gasC[c]=gm.filter(g=>g.categoria===c).reduce((s,g)=>s+g.monto,0));
-  const turnoCub={Mañana:0,Almuerzo:0,Tarde:0};
-  dm.forEach(([,v])=>TURNOS.forEach(t=>turnoCub[t]+=v.turnos?.[t]?.cubiertos||0));
-  const turnoTop=TURNOS.reduce((a,b)=>turnoCub[a]>=turnoCub[b]?a:b,"Mañana");
-  const diaSemC={0:0,1:0,2:0,3:0,4:0,5:0,6:0};
-  dm.forEach(([f,v])=>{ const ds=new Date(f+"T12:00:00").getDay(); diaSemC[ds]+=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0); });
-  const dTop=Object.entries(diaSemC).sort((a,b)=>b[1]-a[1])[0];
-
-  // mes previo
-  const [y,mo]=mesVista.split("-");
-  const dp=new Date(parseInt(y),parseInt(mo)-2,1);
-  const mp=`${dp.getFullYear()}-${String(dp.getMonth()+1).padStart(2,"0")}`;
-  const ingPrev=Object.entries(dias).filter(([f])=>f.startsWith(mp)).reduce((s,[,v])=>s+v.ingresos,0);
-  const varMes=ingPrev>0?((totalIng-ingPrev)/ingPrev)*100:null;
-
-  const mesesDisp=[...new Set([...Object.keys(dias),...gastos.map(g=>g.fecha),...retiros.map(r=>r.fecha)].map(f=>f.slice(0,7)))].sort().reverse();
-  if(!mesesDisp.includes(mesVista)) mesesDisp.unshift(mesVista);
-
-  return `
-  <div style="display:flex;align-items:center;margin-bottom:14px">
-    <p style="font-size:14px;font-weight:500;margin:0">Balance</p>
-    <select onchange="setMes(this.value)" style="margin-left:auto;width:auto;font-size:13px">
-      ${mesesDisp.map(m=>{ const [y2,m2]=m.split("-"); return `<option value="${m}" ${m===mesVista?'selected':''}>${MESES[parseInt(m2)-1]} ${y2}</option>`; }).join("")}
-    </select>
-  </div>
-
-  <!-- Meta -->
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <p class="stitle" style="margin:0">🎯 Meta del mes</p>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input type="number" id="meta-inp" placeholder="Meta $" value="${metas[mesVista]||''}" style="width:100px;font-size:13px">
-        <button onclick="guardarMeta()" style="padding:7px 12px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit">Guardar</button>
-      </div>
-    </div>
-    ${meta>0?`
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:#888;margin-bottom:4px">
-      <span>$${fmt(totalIng)} / $${fmt(meta)}</span>
-      <span style="font-weight:500;color:${pctMeta>=100?'#10B981':pctMeta>=70?'#F59E0B':'#EF4444'}">${fmtD(pctMeta)}%</span>
-    </div>
-    <div class="prog-track"><div class="prog-fill" style="width:${Math.min(100,pctMeta)}%;background:${pctMeta>=100?'#10B981':pctMeta>=70?'#F59E0B':'#EF4444'}"></div></div>
-    <p style="font-size:11px;color:#888;margin-top:6px">${pctMeta>=100?'✅ Meta alcanzada!':pctMeta>=70?'⚡ Vas bien, seguí así':'📍 Faltan $'+fmt(meta-totalIng)}</p>`:''}
-  </div>
-
-  <!-- Resultado -->
-  <div class="card">
-    <p class="stitle">Resultado del mes</p>
-    <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:.5px solid #f0f0f0">
-      <span style="color:#888">Ingresos totales</span><span style="font-weight:500;color:#10B981">$${fmt(totalIng)}</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:.5px solid #f0f0f0">
-      <span style="color:#888">− Costos operativos</span><span style="font-weight:500;color:#EF4444">$${fmt(totalGas)}</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:14px;font-weight:500;border-bottom:.5px solid #f0f0f0">
-      <span>Ganancia operativa</span>
-      <div style="text-align:right">
-        <span style="color:${ganOp>=0?'#10B981':'#EF4444'}">$${fmt(ganOp)}</span>
-        <span style="font-size:11px;color:#888;margin-left:6px">${fmtD(margen)}%</span>
-        ${tc>0?`<p style="font-size:10px;color:#aaa;margin:1px 0 0">USD ${fmt(ganOp/tc)}</p>`:''}
-      </div>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:.5px solid #f0f0f0">
-      <span style="color:#888">− Retiro de socio</span><span style="font-weight:500;color:#8B5CF6">$${fmt(totalRet)}</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:10px 0 4px;font-size:15px;font-weight:500">
-      <span>Resultado neto</span>
-      <div style="text-align:right">
-        <span style="color:${resNeto>=0?'#10B981':'#EF4444'}">$${fmt(resNeto)}</span>
-        ${tc>0?`<p style="font-size:11px;color:#888;margin:2px 0 0">USD ${fmt(resNeto/tc)} · TC $${fmt(tc)}</p>`:''}
-      </div>
-    </div>
-  </div>
-
-  <!-- vs mes anterior -->
-  ${varMes!==null?`<div class="card"><p class="stitle">📊 vs mes anterior</p>
-    <div class="metrics">
-      ${mcard("Mes actual","$"+fmt(totalIng),"#10B981")}
-      ${mcard("Mes anterior","$"+fmt(ingPrev),"#3B82F6")}
-      ${mcard("Variación",(varMes>=0?"+":"")+fmtD(varMes)+"%",varMes>=0?"#10B981":"#EF4444")}
-    </div>
-  </div>`:''}
-
-  <!-- TC -->
-  <div class="card">
-    <p class="stitle">💱 Tipo de cambio</p>
-    <div style="display:flex;gap:10px;align-items:center">
-      <input type="number" id="tc-inp" placeholder="Ej: 1200" value="${tiposCambio[mesVista]||''}" style="flex:1">
-      <button onclick="guardarTC()" style="padding:8px 14px;background:#F59E0B;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit">Guardar</button>
-    </div>
-    ${tiposCambio[mesVista]?`<p style="font-size:11px;color:#888;margin-top:6px">TC guardado: $${fmt(tiposCambio[mesVista])}</p>`:''}
-  </div>
-
-  <!-- Promedio cubiertos -->
-  <div class="card">
-    <p class="stitle">👥 Promedio de cubiertos</p>
-    <div class="metrics" style="margin-bottom:8px">
-      ${mcard("Global/día",fmtD(promCub),"#3B82F6","ticket $"+fmtD(totCub>0?totalIng/totCub:0))}
-    </div>
-    <div class="metrics">
-      ${TURNOS.map(t=>mcard(t,fmtD(dc>0?cub[t]/dc:0),TC[t],"cub/día")).join("")}
-    </div>
-  </div>
-
-  <!-- Insights -->
-  <div class="card">
-    <p class="stitle">💡 Insights del mes</p>
-    <div class="insight"><span class="icon">⭐</span><div><p class="it">Turno más concurrido</p><p class="is">${turnoTop} · ${fmt(turnoCub[turnoTop])} cubiertos totales</p></div></div>
-    ${dTop&&dTop[1]>0?`<div class="insight"><span class="icon">📅</span><div><p class="it">Mejor día de la semana</p><p class="is">${DSEM[dTop[0]]} · ${fmt(dTop[1])} cubiertos acumulados</p></div></div>`:''}
-    <div class="insight"><span class="icon">🎫</span><div><p class="it">Ticket promedio del mes</p><p class="is">$${fmtD(totCub>0?totalIng/totCub:0)} por cubierto · ${fmt(totCub)} cubiertos totales</p></div></div>
-  </div>
-
-  <!-- Gastos -->
-  <div class="card">
-    <p class="stitle">Gastos fijos vs variables</p>
-    <div class="metrics">${mcard("Fijos","$"+fmt(gasF),"#3B82F6")}${mcard("Variables","$"+fmt(gasV),"#F97316")}</div>
-  </div>
-
-  <div class="card"><p class="stitle">Ingresos por medio de cobro</p>
-    ${MC.map(m=>`<div class="bar-row">
-      <span style="font-size:12px;min-width:68px;color:${MCC[m]};font-weight:500">${MCI[m]} ${m}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${totalIng>0?med[m]/totalIng*100:0}%;background:${MCC[m]}"></div></div>
-      <span style="font-size:12px;font-weight:500;min-width:80px;text-align:right">$${fmt(med[m])} <span style="font-size:10px;color:#888">${totalIng>0?fmtD(med[m]/totalIng*100):0}%</span></span>
-    </div>`).join("")}
-  </div>
-
-  <div class="card"><p class="stitle">Cubiertos por turno</p>
-    ${TURNOS.map(t=>`<div class="bar-row">
-      <span style="font-size:12px;color:${TC[t]};font-weight:500;min-width:60px">${t}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${totCub>0?cub[t]/totCub*100:0}%;background:${TC[t]}"></div></div>
-      <span style="font-size:12px;font-weight:500;min-width:28px;text-align:right">${fmt(cub[t])}</span>
-    </div>`).join("")}
-  </div>
-
-  <div class="card"><p class="stitle">Gastos por categoría</p>
-    ${GCATS.filter(c=>gasC[c]>0).map(c=>`<div class="bar-row">
-      <div class="dot" style="background:${GCC[c]}"></div>
-      <span style="font-size:11px;color:#888;min-width:110px">${c}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${totalGas>0?gasC[c]/totalGas*100:0}%;background:${GCC[c]}"></div></div>
-      <span style="font-size:12px;font-weight:500;min-width:60px;text-align:right">$${fmt(gasC[c])}</span>
-    </div>`).join("")}
-  </div>`;
-};
-
-// ---- TENDENCIAS ----
-const renderTendencias = () => {
-  const porDia=Object.entries(dias).map(([f,v])=>{ const gd=gastos.filter(g=>g.fecha===f).reduce((s,g)=>s+g.monto,0),tot=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0); return {fecha:f,ingresos:v.ingresos,ganancia:v.ingresos-gd,cubiertos:tot,ticket:tot>0?v.ingresos/tot:0}; }).sort((a,b)=>b.ganancia-a.ganancia).slice(0,5);
-  const turnoCub={Mañana:0,Almuerzo:0,Tarde:0};
-  Object.values(dias).forEach(v=>TURNOS.forEach(t=>turnoCub[t]+=v.turnos?.[t]?.cubiertos||0));
-  const maxT=Math.max(...Object.values(turnoCub),1);
-  const porMes={};
-  Object.entries(dias).forEach(([f,v])=>{ const m=f.slice(0,7); if(!porMes[m]) porMes[m]={ingresos:0,gastos:0,retiros:0}; porMes[m].ingresos+=v.ingresos; });
-  gastos.forEach(g=>{ const m=g.fecha.slice(0,7); if(!porMes[m]) porMes[m]={ingresos:0,gastos:0,retiros:0}; porMes[m].gastos+=g.monto; });
-  retiros.forEach(r=>{ const m=r.fecha.slice(0,7); if(!porMes[m]) porMes[m]={ingresos:0,gastos:0,retiros:0}; porMes[m].retiros+=r.monto; });
-
-  return `
-  <div class="card"><p class="stitle">Cubiertos totales por turno</p>
-    ${TURNOS.map(t=>`<div class="bar-row">
-      <span style="font-size:12px;color:${TC[t]};font-weight:500;min-width:60px">${t}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${turnoCub[t]/maxT*100}%;background:${TC[t]}"></div></div>
-      <span style="font-size:13px;font-weight:500;min-width:32px;text-align:right">${fmt(turnoCub[t])}</span>
-    </div>`).join("")}
-  </div>
-  <div class="card"><p class="stitle">Días más rentables</p>
-    ${porDia.length===0?'<p class="empty">Sin datos aún</p>':porDia.map((d,i)=>`
-    <div class="list-row">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:11px;color:#aaa;min-width:20px">#${i+1}</span>
-        <div>
-          <p style="font-size:13px;font-weight:500;margin:0">${d.fecha} <span style="font-size:11px;color:#888;font-weight:400">(${dsem(d.fecha)})</span></p>
-          <p style="font-size:11px;color:#888;margin:0">${d.cubiertos} cubiertos · ticket $${fmtD(d.ticket)}</p>
-          ${notas[d.fecha]?`<p style="font-size:10px;color:#aaa;margin:0">📝 ${notas[d.fecha]}</p>`:''}
-        </div>
-      </div>
-      <span style="font-size:13px;font-weight:500;color:${d.ganancia>=0?'#10B981':'#EF4444'}">$${fmt(d.ganancia)}</span>
-    </div>`).join("")}
-  </div>
-  <div class="card"><p class="stitle">Evolución mensual</p>
-    ${Object.keys(porMes).length===0?'<p class="empty">Sin datos aún</p>':Object.entries(porMes).sort().reverse().map(([m,v])=>{
-      const [y2,m2]=m.split("-"),gan=v.ingresos-v.gastos,neto=gan-v.retiros,tc=tiposCambio[m]||0,meta=metas[m]||0;
-      return `<div style="padding:9px 0;border-bottom:.5px solid #f0f0f0">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <div><span style="font-size:13px;font-weight:500">${MESES[parseInt(m2)-1]} ${y2}</span>
-            ${meta>0?`<span style="font-size:10px;margin-left:8px;color:${v.ingresos>=meta?'#10B981':'#F59E0B'}">${fmtD(v.ingresos/meta*100)}% meta</span>`:''}</div>
-          <div style="text-align:right">
-            <span style="font-size:13px;font-weight:500;color:${neto>=0?'#10B981':'#EF4444'}">$${fmt(neto)}</span>
-            ${tc>0?`<span style="font-size:10px;color:#888;margin-left:5px">USD ${fmt(neto/tc)}</span>`:''}
+  ${STATE.gastos.length>0?`<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Últimos gastos</p>
+    ${STATE.gastos.slice(0,15).map(g=>{
+      const emp=g.empleadoId?STATE.empleados.find(e=>e.id==g.empleadoId):null;
+      return `<div class="list-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="dot" style="background:${CAT_COLOR[g.categoria]||"#888"}"></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:13px;font-weight:500">${g.categoria}</span>
+              ${emp?pill(emp.nombre,"#3B82F6"):""}
+              ${pill(g.tipo,g.tipo==="Fijo"?"#3B82F6":"#10B981")}
+            </div>
+            ${g.descripcion?`<p style="font-size:12px;color:#888;margin:0">${g.descripcion}</p>`:""}
+            <span style="font-size:11px;color:#aaa">${g.fecha}</span>
           </div>
         </div>
-        <div style="display:flex;gap:6px;font-size:11px;color:#888;flex-wrap:wrap">
-          <span>Ing: $${fmt(v.ingresos)}</span><span>·</span>
-          <span>Gas: $${fmt(v.gastos)}</span><span>·</span>
-          <span style="color:#10B981">Op: $${fmt(gan)}</span>
-          ${v.retiros>0?`<span>·</span><span style="color:#8B5CF6">Ret: $${fmt(v.retiros)}</span>`:''}
-          ${v.ingresos>0?`<span>·</span><span>Margen: ${fmtD(gan/v.ingresos*100)}%</span>`:''}
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:14px;font-weight:500">$${fmt(g.monto)}</span>
+          <button data-action="del-gasto" data-val="${g.id}" class="del-btn">×</button>
         </div>
       </div>`;
     }).join("")}
-  </div>`;
-};
+  </div>`:""}`;
+}
 
-// ---- HISTORIAL ----
-const renderHistorial = () => {
-  let html=`<div class="card"><p class="stitle">Días registrados <span class="pill" style="background:#F59E0B22;color:#F59E0B">${Object.keys(dias).length}</span></p>
-  ${Object.keys(dias).length===0?'<p class="empty">Sin días registrados</p>':''}
-  ${Object.entries(dias).sort().reverse().map(([f,v])=>{
-    const tot=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0);
-    const mt={Efectivo:0,Tarjeta:0,QR:0};
-    TURNOS.forEach(t=>MC.forEach(m=>mt[m]+=v.turnos?.[t]?.[m]||0));
-    return `<div style="padding:10px 0;border-bottom:.5px solid #f0f0f0">
-      <div style="display:flex;justify-content:space-between;margin-bottom:5px">
-        <span style="font-size:13px;font-weight:500">${f} <span style="font-size:11px;color:#888;font-weight:400">(${dsem(f)})</span></span>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:13px;font-weight:500;color:#10B981">$${fmt(v.ingresos)}</span>
-          <button class="del-btn" onclick="eliminarDia('${f}')">×</button>
-        </div>
-      </div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px">
-        ${TURNOS.map(t=>v.turnos?.[t]?`<span class="pill" style="background:${TC[t]}22;color:${TC[t]}">${t} ${v.turnos[t].cubiertos}cub $${fmt(tTotal(v.turnos[t]))}</span>`:'').join("")}
-        ${MC.map(m=>mt[m]>0?`<span class="pill" style="background:${MCC[m]}22;color:${MCC[m]}">${MCI[m]}$${fmt(mt[m])}</span>`:'').join("")}
-      </div>
-      ${notas[f]?`<p style="font-size:11px;color:#888;margin:4px 0 0">📝 ${notas[f]}</p>`:''}
-    </div>`;
-  }).join("")}
-  </div>`;
-
-  html+=`<div class="card"><p class="stitle">Gastos <span class="pill" style="background:#EF444422;color:#EF4444">${gastos.length}</span></p>
-  ${gastos.length===0?'<p class="empty">Sin gastos</p>':''}
-  ${gastos.map(g=>`<div class="list-row">
-    <div style="display:flex;align-items:center;gap:8px;min-width:0">
-      <div class="dot" style="background:${GCC[g.categoria]||'#888'}"></div>
+// ── RETIROS ───────────────────────────────────────────────────────────────────
+function renderRetiros(){
+  const f=STATE.rForm;
+  const totalMes=STATE.retiros.filter(r=>r.fecha?.startsWith(thisMonth())).reduce((s,r)=>s+r.monto,0);
+  return `<div class="metrics">${metricCard("Retiros este mes","$"+fmt(totalMes),"#8B5CF6")}</div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 14px">Registrar retiro</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Fecha</label><input type="date" data-bind="rForm.fecha" value="${f.fecha}"></div>
+      <div><label class="lbl">Categoría</label><select data-bind="rForm.categoria">${RETIRO_CATS.map(c=>`<option ${f.categoria===c?"selected":""}>${c}</option>`).join("")}</select></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="lbl">Descripción</label><input type="text" data-bind="rForm.descripcion" value="${f.descripcion}" placeholder="Opcional..."></div>
+    <div style="margin-bottom:14px"><label class="lbl">Monto ($)</label><input type="number" data-bind="rForm.monto" value="${f.monto}" placeholder="0"></div>
+    <button data-action="guardar-retiro" class="btn" style="width:100%;background:#8B5CF6">Guardar retiro</button>
+  </div>
+  ${STATE.retiros.length>0?`<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Últimos retiros</p>
+    ${STATE.retiros.slice(0,15).map(r=>`<div class="list-row">
       <div>
-        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
-          <span style="font-size:12px;font-weight:500">${g.categoria}</span>
-          <span class="pill" style="background:${g.tipo==='Fijo'?'#3B82F622':'#10B98122'};color:${g.tipo==='Fijo'?'#3B82F6':'#10B981'}">${g.tipo}</span>
-          ${g.medio?`<span class="pill" style="background:${MGC[g.medio]||'#888'}22;color:${MGC[g.medio]||'#888'}">${g.medio}</span>`:''}
+        <span style="font-size:13px;font-weight:500">${r.categoria}</span>
+        ${r.descripcion?`<p style="font-size:12px;color:#888;margin:0">${r.descripcion}</p>`:""}
+        <span style="font-size:11px;color:#aaa">${r.fecha}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:14px;font-weight:500;color:#8B5CF6">$${fmt(r.monto)}</span>
+        <button data-action="del-retiro" data-val="${r.id}" class="del-btn">×</button>
+      </div>
+    </div>`).join("")}
+  </div>`:""}`;
+}
+
+// ── PERSONAL ──────────────────────────────────────────────────────────────────
+function renderPersonal(){
+  const SUBTABS=["asistencia","empleados","resumen","balance","liquidación","pagos"];
+  return `<div style="display:flex;gap:6px;margin-bottom:16px;overflow-x:auto">
+    ${SUBTABS.map(s=>`<button data-action="set-pers-subtab" data-val="${s}" class="sub-btn ${STATE.personalSubTab===s?"active":""}">${s}</button>`).join("")}
+  </div>
+  ${STATE.personalSubTab==="asistencia"?renderAsistencia():
+    STATE.personalSubTab==="empleados"?renderEmpleados():
+    STATE.personalSubTab==="resumen"?renderResumen():
+    STATE.personalSubTab==="balance"?renderBalanceAnual():
+    STATE.personalSubTab==="liquidación"?renderLiquidacion():
+    renderPagos()}`;
+}
+
+function renderAsistencia(){
+  const hoy=today();
+  const regsHoy=id=>STATE.registros.filter(r=>r.empId===id&&r.fecha===hoy);
+  const estaAdentro=id=>STATE.registros.some(r=>r.empId===id&&r.tipo==="turno"&&!r.salida);
+  const estadoHoy=id=>{const emp=STATE.empleados.find(e=>e.id===id);if(enVacaciones(emp,hoy))return"vacaciones";const r=regsHoy(id);if(r.some(x=>x.tipo==="franco"))return"franco";if(r.some(x=>x.tipo==="falta_injustificada"))return"falta_injustificada";if(r.some(x=>x.tipo==="falta_justificada"))return"falta_justificada";return null;};
+  const tieneMedio=id=>regsHoy(id).some(r=>r.tipo==="medio_franco");
+  return AREAS.map(area=>`
+    <p style="font-size:12px;font-weight:500;color:${AREA_COLOR[area]};text-transform:uppercase;margin:0 0 10px">${area}</p>
+    ${STATE.empleados.filter(e=>e.area===area&&e.activo!==false).map(e=>{
+      const dentro=estaAdentro(e.id),hoy2=estadoHoy(e.id),medio=tieneMedio(e.id),enVac=hoy2==="vacaciones";
+      return `<div class="card" style="padding:12px 14px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div class="emp-avatar" style="background:${dentro?"#D1FAE5":enVac?"#EDE9FE":hoy2?.startsWith("falta")?"#FEE2E2":AREA_BG[area]};color:${dentro?"#059669":enVac?"#7C3AED":hoy2?.startsWith("falta")?"#DC2626":AREA_COLOR[area]}">${e.nombre.slice(0,2).toUpperCase()}</div>
+          <div style="flex:1">
+            <p style="margin:0;font-weight:500;font-size:14px">${e.nombre}</p>
+            <div style="display:flex;gap:5px;margin-top:3px;flex-wrap:wrap">
+              ${dentro?pill("● Trabajando","#059669","#D1FAE5"):""}
+              ${hoy2==="franco"?pill("Franco","#2563EB","#DBEAFE"):""}
+              ${hoy2==="falta_injustificada"?pill("Falta inj.","#DC2626","#FEE2E2"):""}
+              ${hoy2==="falta_justificada"?pill("Falta just.","#92400E","#FEF3C7"):""}
+              ${medio?pill("½ Franco","#92400E","#FEF3C7"):""}
+              ${enVac?pill("Vacaciones","#7C3AED","#EDE9FE"):""}
+            </div>
+          </div>
         </div>
-        ${g.proveedor||g.descripcion?`<p style="font-size:11px;color:#888;margin:0">${g.proveedor||g.descripcion}</p>`:''}
-        <span style="font-size:10px;color:#aaa">${g.fecha}</span>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-      <span style="font-size:13px;font-weight:500">$${fmt(g.monto)}</span>
-      <button class="del-btn" onclick="eliminarGasto('${g.id}')">×</button>
-    </div>
-  </div>`).join("")}
-  </div>`;
+        ${!enVac?`<div style="display:flex;gap:5px;flex-wrap:wrap">
+          ${!dentro&&!hoy2?.startsWith("falta")&&hoy2!=="franco"?`<button data-action="fichar-admin" data-val="${e.id}" data-val2="entrada" class="btn" style="background:#10B981;padding:6px 12px;font-size:12px">Entrada</button>`:""}
+          ${dentro?`<button data-action="fichar-admin" data-val="${e.id}" data-val2="salida" class="btn" style="background:#EF4444;padding:6px 12px;font-size:12px">Salida</button>`:""}
+          ${hoy2!=="franco"&&!hoy2?.startsWith("falta")?`<button data-action="fichar-admin" data-val="${e.id}" data-val2="franco" class="btn" style="background:#3B82F6;padding:6px 12px;font-size:12px">Franco</button>`:""}
+          ${e.tipo==="fijo"&&!medio?`<button data-action="fichar-admin" data-val="${e.id}" data-val2="medio_franco" class="btn" style="background:#F59E0B;padding:6px 12px;font-size:12px">½ Franco</button>`:""}
+          ${e.tipo==="fijo"&&!dentro&&!hoy2?.startsWith("falta")&&hoy2!=="franco"?`<button data-action="open-modal-falta" data-val="${e.id}" style="padding:6px 12px;font-size:12px;cursor:pointer;background:#FEE2E2;border:none;border-radius:8px;color:#DC2626">Falta</button>`:""}
+        </div>`:""}
+      </div>`;
+    }).join("")}`).join("");
+}
 
-  html+=`<div class="card"><p class="stitle">Retiros <span class="pill" style="background:#8B5CF622;color:#8B5CF6">${retiros.length}</span></p>
-  ${retiros.length===0?'<p class="empty">Sin retiros</p>':''}
-  ${retiros.map(r=>`<div class="list-row">
-    <div>
-      <p style="font-size:13px;font-weight:500;margin:0">Retiro de socio</p>
-      ${r.descripcion?`<p style="font-size:11px;color:#888;margin:0">${r.descripcion}</p>`:''}
-      <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
-        ${r.medio?`<span class="pill" style="background:${MGC[r.medio]||'#888'}22;color:${MGC[r.medio]||'#888'}">${r.medio}</span>`:''}
-        <span style="font-size:10px;color:#aaa">${r.fecha}</span>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-size:14px;font-weight:500;color:#8B5CF6">$${fmt(r.monto)}</span>
-      <button class="del-btn" onclick="eliminarRetiro('${r.id}')">×</button>
-    </div>
-  </div>`).join("")}
-  </div>`;
+function renderEmpleados(){
+  return `<button data-action="open-modal-emp" data-val="new" class="btn" style="width:100%;background:#3B82F6;margin-bottom:14px">+ Agregar empleado</button>
+  ${AREAS.map(area=>`
+    <p style="font-size:12px;font-weight:500;color:${AREA_COLOR[area]};text-transform:uppercase;margin:12px 0 8px">${area}</p>
+    ${STATE.empleados.filter(e=>e.area===area).map(e=>`
+      <div class="card" style="padding:12px 14px;margin-bottom:10px;opacity:${e.activo===false?.5:1}">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div class="emp-avatar" style="background:${AREA_BG[area]};color:${AREA_COLOR[area]}">${e.nombre.slice(0,2).toUpperCase()}</div>
+          <div style="flex:1">
+            <p style="margin:0;font-weight:500;font-size:14px">${e.nombre}</p>
+            <p style="margin:0;font-size:12px;color:#888">${e.tipo==="fijo"?`Fijo · ${e.sueldoMensual?moneda(e.sueldoMensual)+"/mes":"sin sueldo"} · ${jornadaEmp(e)}hs/día`:`Temporario · ${e.valorHora?moneda(e.valorHora)+"/h":"sin valor/h"}`}</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button data-action="open-modal-emp" data-val="${e.id}" class="btn-outline" style="font-size:12px;padding:5px 12px">Editar</button>
+          <button data-action="open-modal-vac" data-val="${e.id}" class="btn" style="background:#8B5CF6;padding:5px 12px;font-size:12px">Vacaciones</button>
+          <button data-action="toggle-activo" data-val="${e.id}" class="btn" style="background:${e.activo===false?"#10B981":"#FEE2E2"};color:${e.activo===false?"#fff":"#DC2626"};padding:5px 12px;font-size:12px">${e.activo===false?"Reactivar":"Dar de baja"}</button>
+        </div>
+      </div>`).join("")}`).join("")}`;
+}
 
+function renderResumen(){
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <p style="font-size:13px;font-weight:500;margin:0">Resumen mensual</p>
+    <input type="month" id="pers-mes" value="${STATE.persMes}" data-action="set-pers-mes" style="margin-left:auto;width:auto;font-size:13px">
+  </div>
+  ${AREAS.map(area=>`
+    <p style="font-size:12px;font-weight:500;color:${AREA_COLOR[area]};text-transform:uppercase;margin:0 0 8px">${area}</p>
+    ${STATE.empleados.filter(e=>e.area===area&&e.activo!==false).map(e=>{
+      const r=resumenMes(e,STATE.registros,STATE.persMes);
+      return `<div class="card">
+        <div style="display:flex;align-items:center;margin-bottom:8px">
+          <div class="emp-avatar" style="background:${AREA_BG[area]};color:${AREA_COLOR[area]};margin-right:10px">${e.nombre.slice(0,2).toUpperCase()}</div>
+          <span style="flex:1;font-weight:500;font-size:14px">${e.nombre}</span>
+          <div style="text-align:right">
+            <p style="margin:0;font-size:13px;font-weight:500">${r.horas.toFixed(1)}h <span style="color:#888;font-size:11px">/ ${r.esperadas.toFixed(0)}h esp.</span></p>
+            ${r.extra>0?`<p style="margin:0;font-size:11px;color:#F59E0B;font-weight:500">+${r.extra.toFixed(1)}h extra</p>`:""}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          ${pill("Francos: "+r.francos,"#2563EB","#DBEAFE")}
+          ${pill("½ Franco: "+r.medios,"#92400E","#FEF3C7")}
+          ${r.faltasInj>0?pill("Faltas inj: "+r.faltasInj,"#DC2626","#FEE2E2"):""}
+          ${r.faltasJust>0?pill("Faltas just: "+r.faltasJust,"#92400E","#FEF3C7"):""}
+          ${r.diasVac>0?pill("Vacaciones: "+r.diasVac+"d","#7C3AED","#EDE9FE"):""}
+        </div>
+        ${r.turnos.map(tu=>`<div style="display:flex;gap:6px;font-size:12px;padding:4px 0;border-top:.5px solid #f0f0f0;align-items:center">
+          <span style="min-width:80px;font-weight:500">${isoFecha(tu.fecha)}</span>
+          <span style="flex:1;color:#888">${isoHora(tu.entrada)} → ${isoHora(tu.salida)}</span>
+          <span style="font-weight:500">${diffH(tu.entrada,tu.salida).toFixed(1)}h</span>
+          <button data-action="open-edit-reg" data-val="${tu.id}" style="padding:2px 8px;font-size:11px;cursor:pointer;border:.5px solid #ddd;border-radius:6px;background:transparent">Editar</button>
+          <button data-action="del-reg" data-val="${tu.id}" style="padding:2px 8px;font-size:11px;cursor:pointer;background:#FEE2E2;border:none;border-radius:6px;color:#DC2626">✕</button>
+        </div>`).join("")}
+      </div>`;
+    }).join("")}`).join("")}`;
+}
+
+function renderBalanceAnual(){
+  const anio=STATE.persAnio;
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+    <p style="font-size:13px;font-weight:500;margin:0">Balance anual</p>
+    <select id="pers-anio" data-action="set-pers-anio" style="margin-left:auto;width:auto;font-size:13px">
+      ${[2023,2024,2025,2026,2027].map(y=>`<option ${String(y)===anio?"selected":""}>${y}</option>`).join("")}
+    </select>
+  </div>
+  ${STATE.empleados.filter(e=>e.tipo==="fijo"&&e.activo!==false).map(e=>{
+    const regsAnio=STATE.registros.filter(r=>r.empId===e.id&&r.fecha?.startsWith(anio));
+    const turnos=regsAnio.filter(r=>r.tipo==="turno"&&r.salida);
+    const horasAnio=turnos.reduce((s,r)=>s+diffH(r.entrada,r.salida),0);
+    const francosUsados=regsAnio.filter(r=>r.tipo==="franco").length;
+    const mediosUsados=regsAnio.filter(r=>r.tipo==="medio_franco").length;
+    const vacUsadas=diasVacacionesAnio(e,anio);
+    const semanas=semanasTranscurridasAnio(anio);
+    const saldoF=semanas-francosUsados,saldoM=semanas-mediosUsados,saldoV=VAC_ANUALES-vacUsadas;
+    const faltasInj=regsAnio.filter(r=>r.tipo==="falta_injustificada").length;
+    const diasTrab=new Set(turnos.map(r=>r.fecha)).size;
+    return `<div class="card">
+      <div style="display:flex;align-items:center;margin-bottom:12px">
+        <div class="emp-avatar" style="background:${AREA_BG[e.area]};color:${AREA_COLOR[e.area]};margin-right:10px">${e.nombre.slice(0,2).toUpperCase()}</div>
+        <div style="flex:1"><p style="margin:0;font-weight:500;font-size:14px">${e.nombre}</p><p style="margin:0;font-size:12px;color:#888">${e.area} · ${diasTrab}d · ${horasAnio.toFixed(0)}h</p></div>
+      </div>
+      ${barBalance("Francos ("+semanas+" esperados)",francosUsados,semanas)}
+      ${barBalance("Medios francos ("+semanas+" esperados)",mediosUsados,semanas)}
+      ${barBalance("Vacaciones ("+VAC_ANUALES+" días)",vacUsadas,VAC_ANUALES,"#7C3AED")}
+      <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+        ${saldoF<0?pill(Math.abs(saldoF)+" francos en deuda","#DC2626","#FEE2E2"):""}
+        ${saldoF>0?pill(saldoF+" francos disponibles","#059669","#D1FAE5"):""}
+        ${saldoV>0?pill(saldoV+"d vac. pendientes","#7C3AED","#EDE9FE"):""}
+        ${faltasInj>0?pill(faltasInj+" faltas inj.","#DC2626","#FEE2E2"):""}
+      </div>
+    </div>`;
+  }).join("")}`;
+}
+
+function renderLiquidacion(){
+  const mes=STATE.persMes;
+  const totalDev=STATE.empleados.filter(e=>e.activo!==false).reduce((s,e)=>{const r=resumenMes(e,STATE.registros,mes);return s+(e.tipo==="fijo"?(e.sueldoMensual||0)+r.extra*(e.valorHoraExtra||0):r.horas*(e.valorHora||0));},0);
+  const totalPend=STATE.empleados.filter(e=>e.activo!==false).reduce((s,e)=>s+saldoAcumulado(e.id,mes,STATE.empleados,STATE.registros,STATE.movimientos),0);
+  return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <p style="font-size:13px;font-weight:500;margin:0">Liquidación</p>
+    <input type="month" id="pers-mes" value="${mes}" data-action="set-pers-mes" style="margin-left:auto;width:auto;font-size:13px">
+  </div>
+  <div class="metrics">${metricCard("Total devengado",moneda(totalDev),"#F59E0B")}${metricCard("Saldo pendiente",moneda(totalPend),"#EF4444")}</div>
+  ${AREAS.map(area=>`
+    <p style="font-size:12px;font-weight:500;color:${AREA_COLOR[area]};text-transform:uppercase;margin:0 0 8px">${area}</p>
+    ${STATE.empleados.filter(e=>e.area===area&&e.activo!==false).map(e=>{
+      const r=resumenMes(e,STATE.registros,mes);
+      const liqBase=e.tipo==="fijo"?(e.sueldoMensual||0):r.horas*(e.valorHora||0);
+      const liqExtra=r.extra*(e.valorHoraExtra||0);
+      const liq=liqBase+liqExtra;
+      const movsMes=STATE.movimientos.filter(m=>m.empId===e.id&&m.mes===mes);
+      const adelantos=movsMes.filter(m=>m.tipo==="adelanto").reduce((s,m)=>s+m.monto,0);
+      const pagos=movsMes.filter(m=>m.tipo==="pago").reduce((s,m)=>s+m.monto,0);
+      const saldo=saldoAcumulado(e.id,mes,STATE.empleados,STATE.registros,STATE.movimientos);
+      return `<div class="card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div class="emp-avatar" style="background:${AREA_BG[area]};color:${AREA_COLOR[area]}">${e.nombre.slice(0,2).toUpperCase()}</div>
+          <div style="flex:1">
+            <p style="margin:0;font-weight:500;font-size:14px">${e.nombre}</p>
+            <p style="margin:0;font-size:12px;color:#888">${r.horas.toFixed(1)}h trabajadas · ${r.esperadas.toFixed(0)}h esperadas${r.extra>0?` · ${r.extra.toFixed(1)}h extra`:""}</p>
+          </div>
+          <button data-action="open-modal-mov" data-val="${e.id}" data-val2="${mes}" class="btn" style="background:#10B981;padding:6px 12px;font-size:12px">+ Movimiento</button>
+        </div>
+        <div style="background:#f5f5f0;border-radius:10px;padding:10px 12px;margin-bottom:8px">
+          ${[[`Sueldo base`,liqBase,"#1a1a1a",true],
+             ...(r.extra>0?[[`Hs. extra (${r.extra.toFixed(1)}h × ${moneda(e.valorHoraExtra||0)})`,liqExtra,"#F59E0B",false]]:[]),
+             ["Adelantos",-adelantos,"#DC2626",false],
+             ["Pagos",-pagos,"#059669",false]
+          ].map(([label,val,color,bold])=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:.5px solid #e5e5e5">
+            <span style="font-size:13px;color:#888">${label}</span>
+            <span style="font-size:13px;font-weight:${bold?500:400};color:${color}">${val>=0?moneda(val):"-"+moneda(Math.abs(val))}</span>
+          </div>`).join("")}
+          <div style="display:flex;justify-content:space-between;padding:8px 0 0">
+            <span style="font-size:14px;font-weight:500">Saldo pendiente</span>
+            <span style="font-size:16px;font-weight:500;color:${saldo>0?"#DC2626":"#059669"}">${saldo>0?moneda(saldo):"-"+moneda(Math.abs(saldo))}</span>
+          </div>
+        </div>
+        ${movsMes.map(m=>`<div style="display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 0;border-top:.5px solid #f5f5f5">
+          ${pill(m.tipo==="adelanto"?"Adelanto":"Pago",m.tipo==="adelanto"?"#DC2626":"#059669",m.tipo==="adelanto"?"#FEE2E2":"#D1FAE5")}
+          ${m.medioPago?pill(m.medioPago,"#3B82F6","#EFF6FF"):""}
+          <span style="flex:1;color:#888">${m.nota||""}</span>
+          <span style="font-weight:500;color:${m.tipo==="adelanto"?"#DC2626":"#059669"}">${moneda(m.monto)}</span>
+          <button data-action="del-mov" data-val="${m.id}" style="padding:2px 7px;font-size:11px;cursor:pointer;background:transparent;border:none;color:#DC2626">✕</button>
+        </div>`).join("")}
+      </div>`;
+    }).join("")}`).join("")}`;
+}
+
+function renderPagos(){
+  if(STATE.histEmpId){
+    const emp=STATE.empleados.find(e=>e.id===STATE.histEmpId);
+    const movs=[...STATE.movimientos.filter(m=>m.empId===STATE.histEmpId)].sort((a,b)=>a.fecha<b.fecha?1:-1);
+    const totalPag=movs.filter(m=>m.tipo==="pago").reduce((s,m)=>s+m.monto,0);
+    const totalAd=movs.filter(m=>m.tipo==="adelanto").reduce((s,m)=>s+m.monto,0);
+    return `<button data-action="set-hist-emp" data-val="null" style="font-size:13px;color:#888;background:none;border:none;cursor:pointer;margin-bottom:14px">← Volver</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div class="emp-avatar" style="width:44px;height:44px;font-size:14px;background:${AREA_BG[emp?.area]};color:${AREA_COLOR[emp?.area]}">${emp?.nombre.slice(0,2).toUpperCase()}</div>
+      <div><p style="margin:0;font-weight:500;font-size:16px">${emp?.nombre}</p><p style="margin:0;font-size:12px;color:#888">${emp?.area}</p></div>
+    </div>
+    <div class="metrics">${metricCard("Total pagado",moneda(totalPag),"#10B981")}${metricCard("Total adelantado",moneda(totalAd),"#EF4444")}</div>
+    <div class="card">
+      ${movs.length===0?`<p style="font-size:13px;color:#888">Sin movimientos</p>`:""}
+      ${movs.map(m=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:.5px solid #f0f0f0">
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            ${pill(m.tipo==="adelanto"?"Adelanto":"Pago",m.tipo==="adelanto"?"#DC2626":"#059669",m.tipo==="adelanto"?"#FEE2E2":"#D1FAE5")}
+            ${m.medioPago?pill(m.medioPago,"#3B82F6","#EFF6FF"):""}
+            <span style="font-size:11px;color:#aaa">${mesLabel(m.mes)}</span>
+          </div>
+          ${m.nota?`<p style="font-size:12px;color:#888;margin:0">${m.nota}</p>`:""}
+          <span style="font-size:11px;color:#aaa">${isoFecha(m.fecha)}</span>
+        </div>
+        <span style="font-size:15px;font-weight:500;color:${m.tipo==="adelanto"?"#DC2626":"#059669"}">${moneda(m.monto)}</span>
+      </div>`).join("")}
+    </div>`;
+  }
+  return `<p style="font-size:13px;font-weight:500;margin:0 0 14px">Historial de pagos</p>
+  ${STATE.empleados.filter(e=>e.activo!==false).map(e=>{
+    const movs=STATE.movimientos.filter(m=>m.empId===e.id);
+    const totalPag=movs.filter(m=>m.tipo==="pago").reduce((s,m)=>s+m.monto,0);
+    const totalAd=movs.filter(m=>m.tipo==="adelanto").reduce((s,m)=>s+m.monto,0);
+    return `<div class="card" style="cursor:pointer" data-action="set-hist-emp" data-val="${e.id}">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="emp-avatar" style="background:${AREA_BG[e.area]};color:${AREA_COLOR[e.area]}">${e.nombre.slice(0,2).toUpperCase()}</div>
+        <div style="flex:1">
+          <p style="margin:0;font-weight:500;font-size:14px">${e.nombre}</p>
+          <p style="margin:0;font-size:12px;color:#888">${movs.length} movimientos · Pagos: ${moneda(totalPag)} · Adelantos: ${moneda(totalAd)}</p>
+        </div>
+        <span style="font-size:18px;color:#ccc">›</span>
+      </div>
+    </div>`;
+  }).join("")}`;
+}
+
+// ── BALANCE ───────────────────────────────────────────────────────────────────
+function renderBalance(){
+  const mes=STATE.balMes;
+  const mesesDisp=[...new Set([...Object.keys(STATE.dias),...STATE.gastos.map(g=>g.fecha),...STATE.retiros.map(r=>r.fecha)].map(f=>f.slice(0,7)))].sort().reverse();
+  if(!mesesDisp.includes(mes))mesesDisp.unshift(mes);
+  const diasMes=Object.entries(STATE.dias).filter(([f])=>f.startsWith(mes));
+  const gastosMes=STATE.gastos.filter(g=>g.fecha?.startsWith(mes));
+  const retirosMes=STATE.retiros.filter(r=>r.fecha?.startsWith(mes));
+  const totalIng=diasMes.reduce((s,[,v])=>s+v.ingresos,0);
+  const totalGas=gastosMes.reduce((s,g)=>s+g.monto,0);
+  const totalRet=retirosMes.reduce((s,r)=>s+r.monto,0);
+  const cub={Mañana:0,Almuerzo:0,Tarde:0},medios={Efectivo:0,Tarjeta:0,QR:0};
+  diasMes.forEach(([,v])=>{TURNOS.forEach(t=>{cub[t]+=v.turnos?.[t]?.cubiertos||0;MEDIOS.forEach(m=>medios[m]+=v.turnos?.[t]?.[m]||0);});});
+  const totCub=TURNOS.reduce((s,t)=>s+cub[t],0);
+  const ganancia=totalIng-totalGas-totalRet,margen=totalIng>0?(ganancia/totalIng)*100:0;
+  const gasF=gastosMes.filter(g=>g.tipo==="Fijo").reduce((s,g)=>s+g.monto,0);
+  const gasV=gastosMes.filter(g=>g.tipo==="Variable").reduce((s,g)=>s+g.monto,0);
+  const gasC={},retC={};
+  GASTO_CATS.forEach(c=>gasC[c]=gastosMes.filter(g=>g.categoria===c).reduce((s,g)=>s+g.monto,0));
+  RETIRO_CATS.forEach(c=>retC[c]=retirosMes.filter(r=>r.categoria===c).reduce((s,r)=>s+r.monto,0));
+  return `<div style="display:flex;align-items:center;margin-bottom:14px">
+    <p style="font-size:14px;font-weight:500;margin:0">Balance</p>
+    <select id="bal-mes" data-action="set-bal-mes" style="margin-left:auto;width:auto;font-size:13px">
+      ${mesesDisp.map(m=>{const[y,mo]=m.split("-");return`<option value="${m}" ${m===mes?"selected":""}>${MESES[parseInt(mo)-1]} ${y}</option>`;}).join("")}
+    </select>
+  </div>
+  <div class="metrics">${metricCard("Ingresos","$"+fmt(totalIng),"#10B981")}${metricCard("Gastos","$"+fmt(totalGas),"#EF4444")}</div>
+  <div class="metrics">${metricCard("Retiros","$"+fmt(totalRet),"#8B5CF6")}${metricCard("Resultado","$"+fmt(ganancia),ganancia>=0?"#10B981":"#EF4444",fmtD(margen)+"% de margen")}</div>
+  <div class="metrics">${metricCard("Ticket prom.","$"+fmtD(totCub>0?totalIng/totCub:0),"#F59E0B",fmt(totCub)+" cubiertos")}${metricCard("Fijos","$"+fmt(gasF),"#3B82F6")}${metricCard("Variables","$"+fmt(gasV),"#F97316")}</div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Medios de cobro</p>
+    ${MEDIOS.map(m=>`<div class="bar-row">
+      <span style="font-size:13px;min-width:68px">${MEDIO_ICON[m]} <span style="color:${MEDIO_COLOR[m]};font-weight:500">${m}</span></span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalIng>0?medios[m]/totalIng*100:0}%;background:${MEDIO_COLOR[m]}"></div></div>
+      <div style="text-align:right;min-width:90px"><span style="font-size:13px;font-weight:500">$${fmt(medios[m])}</span> <span style="font-size:11px;color:#888">${totalIng>0?fmtD(medios[m]/totalIng*100):0}%</span></div>
+    </div>`).join("")}
+  </div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Cubiertos por turno</p>
+    ${TURNOS.map(t=>`<div class="bar-row">
+      <span style="font-size:12px;color:${TURNO_COLOR[t]};font-weight:500;min-width:60px">${t}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totCub>0?cub[t]/totCub*100:0}%;background:${TURNO_COLOR[t]}"></div></div>
+      <span style="font-size:13px;font-weight:500;min-width:28px;text-align:right">${fmt(cub[t])}</span>
+    </div>`).join("")}
+  </div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Gastos por categoría</p>
+    ${GASTO_CATS.filter(c=>gasC[c]>0).map(c=>`<div class="bar-row">
+      <div class="dot" style="background:${CAT_COLOR[c]}"></div>
+      <span style="font-size:13px;color:#888;min-width:120px">${c}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalGas>0?gasC[c]/totalGas*100:0}%;background:${CAT_COLOR[c]}"></div></div>
+      <span style="font-size:13px;font-weight:500;min-width:60px;text-align:right">$${fmt(gasC[c])}</span>
+    </div>`).join("")}
+  </div>
+  ${totalRet>0?`<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Retiros por categoría</p>
+    ${RETIRO_CATS.filter(c=>retC[c]>0).map(c=>`<div class="bar-row">
+      <div class="dot" style="background:#8B5CF6"></div>
+      <span style="font-size:13px;color:#888;min-width:120px">${c}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${totalRet>0?retC[c]/totalRet*100:0}%;background:#8B5CF6"></div></div>
+      <span style="font-size:13px;font-weight:500;min-width:60px;text-align:right">$${fmt(retC[c])}</span>
+    </div>`).join("")}
+  </div>`:""}`;
+}
+
+// ── TENDENCIAS ────────────────────────────────────────────────────────────────
+function renderTendencias(){
+  const porDia=Object.entries(STATE.dias).map(([f,v])=>{const gd=STATE.gastos.filter(g=>g.fecha===f).reduce((s,g)=>s+g.monto,0),tot=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0);return{fecha:f,ingresos:v.ingresos,ganancia:v.ingresos-gd,cubiertos:tot,ticket:tot>0?v.ingresos/tot:0};}).sort((a,b)=>b.ganancia-a.ganancia);
+  const turnoCub={Mañana:0,Almuerzo:0,Tarde:0};
+  Object.values(STATE.dias).forEach(v=>TURNOS.forEach(t=>turnoCub[t]+=v.turnos?.[t]?.cubiertos||0));
+  const maxT=Math.max(...Object.values(turnoCub),1);
+  const porMes={};
+  Object.entries(STATE.dias).forEach(([f,v])=>{const m=f.slice(0,7);if(!porMes[m])porMes[m]={ingresos:0,gastos:0};porMes[m].ingresos+=v.ingresos;});
+  STATE.gastos.forEach(g=>{const m=g.fecha?.slice(0,7);if(m){if(!porMes[m])porMes[m]={ingresos:0,gastos:0};porMes[m].gastos+=g.monto;}});
+  return `<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Cubiertos por turno (total)</p>
+    ${TURNOS.map(t=>`<div class="bar-row">
+      <span style="font-size:12px;color:${TURNO_COLOR[t]};font-weight:500;min-width:60px">${t}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${maxT>0?turnoCub[t]/maxT*100:0}%;background:${TURNO_COLOR[t]}"></div></div>
+      <span style="font-size:14px;font-weight:500;min-width:32px;text-align:right">${fmt(turnoCub[t])}</span>
+    </div>`).join("")}
+  </div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Días más rentables</p>
+    ${porDia.length===0?`<p style="font-size:13px;color:#888">Sin datos aún</p>`:""}
+    ${porDia.slice(0,5).map((d,i)=>`<div class="list-row">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:11px;color:#aaa;min-width:20px">#${i+1}</span>
+        <div><p style="font-size:13px;font-weight:500;margin:0">${d.fecha}</p><p style="font-size:11px;color:#888;margin:0">${d.cubiertos} cubiertos · ticket $${fmtD(d.ticket)}</p></div>
+      </div>
+      <span style="font-size:14px;font-weight:500;color:${d.ganancia>=0?"#10B981":"#EF4444'}"}">$${fmt(d.ganancia)}</span>
+    </div>`).join("")}
+  </div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Evolución mensual</p>
+    ${Object.keys(porMes).length===0?`<p style="font-size:13px;color:#888">Sin datos aún</p>`:""}
+    ${Object.entries(porMes).sort().reverse().map(([m,v])=>{const[y,mo]=m.split("-"),gan=v.ingresos-v.gastos;return`<div style="padding:9px 0;border-bottom:.5px solid #f0f0f0">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500">${MESES[parseInt(mo)-1]} ${y}</span>
+        <span style="font-size:13px;font-weight:500;color:${gan>=0?"#10B981":"#EF4444"}">${gan>=0?"+":"-"}$${fmt(Math.abs(gan))}</span>
+      </div>
+      <div style="display:flex;gap:8px;font-size:11px;color:#888">
+        <span>Ing: $${fmt(v.ingresos)}</span><span>·</span><span>Gas: $${fmt(v.gastos)}</span>
+        ${v.ingresos>0?`<span>·</span><span>Margen: ${fmtD(gan/v.ingresos*100)}%</span>`:""}
+      </div>
+    </div>`;}).join("")}
+  </div>`;
+}
+
+// ── HISTORIAL ─────────────────────────────────────────────────────────────────
+function renderHistorial(){
+  return `<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Días ${pill(Object.keys(STATE.dias).length,"#F59E0B")}</p>
+    ${Object.keys(STATE.dias).length===0?`<p style="font-size:13px;color:#888">Sin días registrados</p>`:""}
+    ${Object.entries(STATE.dias).sort().reverse().map(([f,v])=>{
+      const tot=TURNOS.reduce((s,t)=>s+(v.turnos?.[t]?.cubiertos||0),0),medTot={Efectivo:0,Tarjeta:0,QR:0};
+      TURNOS.forEach(t=>MEDIOS.forEach(m=>medTot[m]+=v.turnos?.[t]?.[m]||0));
+      return `<div style="padding:10px 0;border-bottom:.5px solid #f0f0f0">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+          <span style="font-size:13px;font-weight:500">${f}</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:14px;font-weight:500;color:#10B981">$${fmt(v.ingresos)}</span>
+            <button data-action="del-dia" data-val="${f}" class="del-btn">×</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          ${TURNOS.map(t=>v.turnos?.[t]?pill(`${t} ${v.turnos[t].cubiertos} cub. $${fmt(turnoTotal(v.turnos[t]))}`,TURNO_COLOR[t]):"").join("")}
+          ${MEDIOS.map(m=>medTot[m]>0?pill(`${MEDIO_ICON[m]}$${fmt(medTot[m])}`,MEDIO_COLOR[m]):"").join("")}
+        </div>
+      </div>`;
+    }).join("")}
+  </div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Gastos ${pill(STATE.gastos.length,"#EF4444")}</p>
+    ${STATE.gastos.length===0?`<p style="font-size:13px;color:#888">Sin gastos</p>`:""}
+    ${STATE.gastos.slice(0,20).map(g=>`<div class="list-row">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="dot" style="background:${CAT_COLOR[g.categoria]||"#888"}"></div>
+        <div><span style="font-size:13px;font-weight:500">${g.categoria}</span>${g.descripcion?`<p style="font-size:12px;color:#888;margin:0">${g.descripcion}</p>`:""}<span style="font-size:11px;color:#aaa">${g.fecha}</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:14px;font-weight:500">$${fmt(g.monto)}</span>
+        <button data-action="del-gasto" data-val="${g.id}" class="del-btn">×</button>
+      </div>
+    </div>`).join("")}
+  </div>
+  <div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 12px">Retiros ${pill(STATE.retiros.length,"#8B5CF6")}</p>
+    ${STATE.retiros.length===0?`<p style="font-size:13px;color:#888">Sin retiros</p>`:""}
+    ${STATE.retiros.slice(0,20).map(r=>`<div class="list-row">
+      <div><span style="font-size:13px;font-weight:500">${r.categoria}</span>${r.descripcion?`<p style="font-size:12px;color:#888;margin:0">${r.descripcion}</p>`:""}<span style="font-size:11px;color:#aaa">${r.fecha}</span></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:14px;font-weight:500;color:#8B5CF6">$${fmt(r.monto)}</span>
+        <button data-action="del-retiro" data-val="${r.id}" class="del-btn">×</button>
+      </div>
+    </div>`).join("")}
+  </div>`;
+}
+
+// eliminar día desde historial
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-action='del-dia']");if(!t)return;
+  await delDia(t.dataset.val);
+});
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+function renderConfig(){
+  return `<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 14px">Cambiar PIN de administrador</p>
+    <div style="margin-bottom:10px"><label class="lbl">Nuevo PIN</label><input type="password" inputmode="numeric" id="pin-nuevo" maxlength="8" placeholder="••••" style="letter-spacing:8px;font-size:20px"></div>
+    <div style="margin-bottom:14px"><label class="lbl">Confirmar PIN</label><input type="password" inputmode="numeric" id="pin-confirm" maxlength="8" placeholder="••••" style="letter-spacing:8px;font-size:20px"></div>
+    <p id="pin-msg" style="font-size:12px;margin-bottom:10px;color:#EF4444"></p>
+    <button data-action="guardar-pin" class="btn" style="width:100%;background:#3B82F6">Actualizar PIN</button>
+  </div>`;
+}
+
+// ── MODALES ───────────────────────────────────────────────────────────────────
+function renderModals(){
+  let html="";
+  // Modal empleado
+  if(STATE.modalEmp){
+    const e=STATE.modalEmp;
+    html+=`<div class="modal-overlay">
+      <div class="modal-box">
+        <h3>${e.id?"Editar":"Nuevo"} empleado</h3>
+        <div style="margin-bottom:10px"><label class="lbl">Nombre</label><input type="text" data-bind="modalEmp.nombre" value="${e.nombre||""}"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <div><label class="lbl">Área</label><select data-bind="modalEmp.area">${AREAS.map(a=>`<option ${e.area===a?"selected":""}>${a}</option>`).join("")}</select></div>
+          <div><label class="lbl">Tipo</label><select data-bind="modalEmp.tipo"><option value="fijo" ${e.tipo==="fijo"?"selected":""}>Fijo</option><option value="temporario" ${e.tipo==="temporario"?"selected":""}>Temporario</option></select></div>
+        </div>
+        ${e.tipo==="fijo"?`<div style="margin-bottom:10px"><label class="lbl">Sueldo mensual ($)</label><input type="number" data-bind="modalEmp.sueldoMensual" value="${e.sueldoMensual||""}" placeholder="0"></div>`:""}
+        ${e.tipo==="temporario"?`<div style="margin-bottom:10px"><label class="lbl">Valor hora ($)</label><input type="number" data-bind="modalEmp.valorHora" value="${e.valorHora||""}" placeholder="0"></div>`:""}
+        <div style="margin-bottom:14px"><label class="lbl">Valor hora extra ($)</label><input type="number" data-bind="modalEmp.valorHoraExtra" value="${e.valorHoraExtra||""}" placeholder="0"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button data-action="close-modal-emp" class="btn-outline">Cancelar</button>
+          <button data-action="guardar-emp" class="btn" style="background:#F59E0B;padding:8px 18px">Guardar</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  // Modal falta
+  if(STATE.modalFalta){
+    html+=`<div class="modal-overlay">
+      <div class="modal-box">
+        <h3>Registrar falta</h3>
+        <p style="font-size:13px;color:#888;margin:0 0 16px">${STATE.modalFalta.nombre}</p>
+        <div style="display:flex;gap:8px;margin-bottom:20px">
+          <button data-action="confirmar-falta" data-val="injustificada" class="btn" style="flex:1;background:#EF4444">Injustificada</button>
+          <button data-action="confirmar-falta" data-val="justificada" class="btn" style="flex:1;background:#F59E0B">Justificada</button>
+        </div>
+        <button data-action="close-modal-falta" class="btn-outline" style="width:100%">Cancelar</button>
+      </div>
+    </div>`;
+  }
+  // Modal vacaciones
+  if(STATE.modalVac){
+    const anio=new Date().getFullYear();
+    const usadas=diasVacacionesAnio(STATE.modalVac,anio);
+    html+=`<div class="modal-overlay">
+      <div class="modal-box">
+        <h3>Vacaciones — ${STATE.modalVac.nombre}</h3>
+        <div style="background:#EDE9FE;border-radius:10px;padding:8px 12px;margin-bottom:16px;display:flex;justify-content:space-between">
+          <span style="font-size:13px;color:#7C3AED;font-weight:500">Días usados ${anio}</span>
+          <span style="font-size:16px;font-weight:500;color:${usadas>VAC_ANUALES?"#DC2626":"#7C3AED"}">${usadas}/${VAC_ANUALES}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <div><label class="lbl">Desde</label><input type="date" data-bind="modalVacDesde" value="${STATE.modalVacDesde}"></div>
+          <div><label class="lbl">Hasta</label><input type="date" data-bind="modalVacHasta" value="${STATE.modalVacHasta}"></div>
+        </div>
+        <button data-action="add-vac" class="btn" style="width:100%;background:#10B981;margin-bottom:16px">+ Agregar período</button>
+        ${(STATE.modalVac.vacaciones||[]).map(v=>{const dias=Math.round((new Date(v.hasta)-new Date(v.desde))/86400000)+1;return`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-top:.5px solid #e5e5e5">
+          <div style="flex:1"><p style="margin:0;font-size:13px;font-weight:500">${isoFecha(v.desde)} → ${isoFecha(v.hasta)}</p><p style="margin:0;font-size:11px;color:#888">${dias} día${dias!==1?"s":""}</p></div>
+          <button data-action="del-vac" data-val="${v.id}" style="padding:4px 10px;font-size:12px;cursor:pointer;background:#FEE2E2;border:none;border-radius:8px;color:#DC2626">Eliminar</button>
+        </div>`;}).join("")}
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+          <button data-action="close-modal-vac" class="btn-outline">Cancelar</button>
+          <button data-action="guardar-vac" class="btn" style="background:#F59E0B;padding:8px 18px">Guardar</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  // Modal movimiento
+  if(STATE.modalMov){
+    const emp=STATE.empleados.find(e=>e.id===STATE.modalMov.empId);
+    html+=`<div class="modal-overlay">
+      <div class="modal-box">
+        <h3>Registrar movimiento</h3>
+        <p style="font-size:13px;color:#888;margin:0 0 14px">${emp?.nombre} · ${mesLabel(STATE.modalMov.mes)}</p>
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <button data-action="set-mov-tipo" data-val="adelanto" class="btn" style="flex:1;background:${STATE.modalMovTipo==="adelanto"?"#EF4444":"#f5f5f5"};color:${STATE.modalMovTipo==="adelanto"?"#fff":"#888"};border:2px solid ${STATE.modalMovTipo==="adelanto"?"#EF4444":"#e5e5e5"}">Adelanto</button>
+          <button data-action="set-mov-tipo" data-val="pago" class="btn" style="flex:1;background:${STATE.modalMovTipo==="pago"?"#10B981":"#f5f5f5"};color:${STATE.modalMovTipo==="pago"?"#fff":"#888"};border:2px solid ${STATE.modalMovTipo==="pago"?"#10B981":"#e5e5e5"}">Pago</button>
+        </div>
+        <div style="margin-bottom:10px"><label class="lbl">Medio de pago</label>
+          <div style="display:flex;gap:8px">
+            ${MEDIO_PAGO.map(m=>`<button data-action="set-mov-medio" data-val="${m}" style="flex:1;padding:8px 0;font-size:13px;cursor:pointer;border-radius:10px;border:1.5px solid ${STATE.modalMovMedio===m?"#3B82F6":"#e5e5e5"};background:${STATE.modalMovMedio===m?"#EFF6FF":"#fafafa"};color:${STATE.modalMovMedio===m?"#2563EB":"#888"};font-weight:${STATE.modalMovMedio===m?500:400}">${m}</button>`).join("")}
+          </div>
+        </div>
+        <div style="margin-bottom:10px"><label class="lbl">Monto ($)</label><input type="number" data-bind="modalMovMonto" value="${STATE.modalMovMonto}" placeholder="0"></div>
+        <div style="margin-bottom:14px"><label class="lbl">Nota (opcional)</label><input type="text" data-bind="modalMovNota" value="${STATE.modalMovNota}" placeholder="Ej: anticipo quincena"></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button data-action="close-modal-mov" class="btn-outline">Cancelar</button>
+          <button data-action="guardar-mov" class="btn" style="background:${STATE.modalMovTipo==="adelanto"?"#EF4444":"#10B981"};padding:8px 18px">Registrar</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  // Modal editar registro
+  if(STATE.editReg){
+    html+=`<div class="modal-overlay">
+      <div class="modal-box">
+        <h3>Editar turno</h3>
+        ${[["entrada","Entrada"],["salida","Salida"]].map(([k,label])=>`<div style="margin-bottom:12px"><label class="lbl">${label}</label><input type="datetime-local" data-bind="editReg.${k}" value="${STATE.editReg[k]?STATE.editReg[k].slice(0,16):""}"></div>`).join("")}
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button data-action="close-edit-reg" class="btn-outline">Cancelar</button>
+          <button data-action="guardar-edit-reg" class="btn" style="background:#F59E0B;padding:8px 18px">Guardar</button>
+        </div>
+      </div>
+    </div>`;
+  }
   return html;
-};
+}
 
-// ---- HELPERS ----
-const mcard = (label,value,color,sub='') => `<div class="metric" style="background:${color}14">
-  <div class="ml" style="color:${color}">${label}</div>
-  <div class="mv">${value}</div>
-  ${sub?`<div class="ms">${sub}</div>`:''}
-</div>`;
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function metricCard(label,value,color,sub=""){
+  return `<div class="metric" style="background:${color}14">
+    <div class="ml" style="color:${color}">${label}</div>
+    <div class="mv">${value}</div>
+    ${sub?`<div class="ms">${sub}</div>`:""}
+  </div>`;
+}
 
-// ---- EVENTS ----
-const attachEvents = () => {
-  document.getElementById("caj-fecha")?.addEventListener("change",e=>{ cajFecha=e.target.value; cajEditando={}; cajForms={Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}}; render(); });
-  document.getElementById("pin-input")?.addEventListener("keydown",e=>{ if(e.key==="Enter") window.checkPin(); });
-  document.getElementById("g-fecha")?.addEventListener("change",e=>gForm.fecha=e.target.value);
-  document.getElementById("g-tipo")?.addEventListener("change",e=>gForm.tipo=e.target.value);
-  document.getElementById("g-prov")?.addEventListener("change",e=>gForm.proveedor=e.target.value);
-  document.getElementById("g-desc")?.addEventListener("input",e=>gForm.descripcion=e.target.value);
-  document.getElementById("g-monto")?.addEventListener("input",e=>gForm.monto=e.target.value);
-  document.getElementById("g-rec")?.addEventListener("change",e=>gForm.recurrente=e.target.checked);
-  document.getElementById("r-fecha")?.addEventListener("change",e=>rForm.fecha=e.target.value);
-  document.getElementById("r-monto")?.addEventListener("input",e=>rForm.monto=e.target.value);
-  document.getElementById("r-desc")?.addEventListener("input",e=>rForm.descripcion=e.target.value);
-};
+function barBalance(label,usado,total,colorOk="#10B981",colorEx="#EF4444"){
+  const pct=total>0?Math.min(100,(usado/total)*100):0;
+  const exceso=usado>total,color=exceso?colorEx:colorOk,saldo=total-usado;
+  return `<div class="bar-balance">
+    <div class="bl"><span style="color:#888">${label}</span><span style="font-weight:500;color:${color}">${usado}/${total} ${exceso?`(+${Math.abs(saldo)} exceso)`:`(${saldo} restantes)`}</span></div>
+    <div class="bt"><div style="width:${pct}%;height:100%;background:${color};border-radius:99px"></div></div>
+  </div>`;
+}
 
-// ---- GLOBAL ACTIONS ----
-window.goHome = () => { screen="home"; render(); };
-window.goOwner = () => { pinTarget=0; pinVal=""; screen="owner"; render(); setTimeout(()=>document.getElementById("pin-input")?.focus(),100); };
-window.goStaff = () => { screen="staff"; render(); };
-window.lockApp = () => { unlocked=false; currentTab=0; render(); };
-window.setTab = i => { currentTab=i; render(); };
-window.requirePin = i => { pinTarget=i; pinVal=""; render(); setTimeout(()=>document.getElementById("pin-input")?.focus(),100); };
-window.closePin = () => { pinTarget=null; render(); };
-window.checkPin = () => {
-  const v=document.getElementById("pin-input")?.value||"";
-  if(v===PIN){ unlocked=true; const t=pinTarget; pinTarget=null; currentTab=t!==null?t:0; render(); }
-  else { document.getElementById("pin-err").textContent="PIN incorrecto"; document.getElementById("pin-input").value=""; }
-};
-window.setCajTurno = t => { cajTurno=t; cajEditando[t]=false; render(); };
-window.editTurno = t => { cajEditando[t]=true; const d=dias[cajFecha]?.turnos?.[t]; if(d) cajForms[t]={cubiertos:String(d.cubiertos||""),Efectivo:String(d.Efectivo||""),Tarjeta:String(d.Tarjeta||""),QR:String(d.QR||"")}; render(); };
-window.updateCajForm = (field,val) => cajForms[cajTurno][field]=val;
-window.gSetCat = v => { gForm.categoria=v; gForm.proveedor=""; render(); };
-window.gSetMedio = m => { gForm.medio=m; render(); };
-window.rSetMedio = m => { rForm.medio=m; render(); };
-window.setMes = m => { mesVista=m; render(); };
-
-window.guardarTurno = async t => {
-  saving=true; render();
-  const f=cajForms[t];
-  const td={cubiertos:parseInt(f.cubiertos)||0,Efectivo:parseFloat(f.Efectivo)||0,Tarjeta:parseFloat(f.Tarjeta)||0,QR:parseFloat(f.QR)||0};
-  const diaAct=dias[cajFecha]||{turnos:{}};
-  const nt={...(diaAct.turnos||{}),[t]:td};
-  await saveDia(cajFecha,{ingresos:TURNOS.reduce((s,t)=>s+tTotal(nt[t]),0),turnos:nt});
-  cajEditando[t]=false; saving=false;
-  showToast("✓ Turno "+t+" guardado");
-};
-
-window.guardarNota = async () => {
-  const val=document.getElementById("nota-dia")?.value||"";
-  await saveNota(cajFecha,val);
-  showToast("✓ Nota guardada");
-};
-
-window.guardarGasto = async () => {
-  const monto=parseFloat(document.getElementById("g-monto")?.value)||0;
-  if(!monto) return;
-  const id=Date.now();
-  await saveGasto({id,fecha:document.getElementById("g-fecha")?.value||today(),categoria:document.getElementById("g-cat")?.value||"Materias primas",proveedor:document.getElementById("g-prov")?.value||"",descripcion:document.getElementById("g-desc")?.value||"",monto,tipo:document.getElementById("g-tipo")?.value||"Variable",medio:gForm.medio,recurrente:gForm.recurrente});
-  gForm={...gForm,proveedor:"",descripcion:"",monto:""};
-  showToast("✓ Gasto guardado");
-};
-
-window.guardarRetiro = async () => {
-  const monto=parseFloat(document.getElementById("r-monto")?.value)||0;
-  if(!monto) return;
-  await saveRetiro({id:Date.now(),fecha:document.getElementById("r-fecha")?.value||today(),monto,descripcion:document.getElementById("r-desc")?.value||"",medio:rForm.medio});
-  rForm={...rForm,monto:"",descripcion:""};
-  showToast("✓ Retiro registrado");
-};
-
-window.guardarMeta = async () => {
-  const val=parseFloat(document.getElementById("meta-inp")?.value)||0;
-  await saveMeta(mesVista,val);
-  showToast("✓ Meta guardada");
-};
-
-window.guardarTC = async () => {
-  const val=parseFloat(document.getElementById("tc-inp")?.value)||0;
-  await saveTC(mesVista,val);
-  showToast("✓ Tipo de cambio guardado");
-};
-
-window.eliminarDia = async f => { if(confirm("¿Eliminar el día "+f+"?")) await delDia(f); };
-window.eliminarGasto = async id => { if(confirm("¿Eliminar este gasto?")) await delGasto(id); };
-window.eliminarRetiro = async id => { if(confirm("¿Eliminar este retiro?")) await delRetiro(id); };
-
-render();
+// Handle select changes for fecha inputs
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="caj-fecha"){STATE.cajFecha=t.value;STATE.cajEditando={};const d=STATE.dias[STATE.cajFecha];STATE.cajForms={Mañana:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Almuerzo:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""},Tarde:{cubiertos:"",Efectivo:"",Tarjeta:"",QR:""}};if(d)TURNOS.forEach(tt=>{if(d.turnos?.[tt])STATE.cajForms[tt]={cubiertos:d.turnos[tt].cubiertos?.toString()||"",Efectivo:d.turnos[tt].Efectivo?.toString()||"",Tarjeta:d.turnos[tt].Tarjeta?.toString()||"",QR:d.turnos[tt].QR?.toString()||""};});R();}
+  else if(t.id==="pers-mes"){STATE.persMes=t.value;R();}
+  else if(t.id==="pers-anio"){STATE.persAnio=t.value;R();}
+  else if(t.id==="bal-mes"){STATE.balMes=t.value;R();}
+  else if(t.dataset.bind){
+    const parts=t.dataset.bind.split(".");
+    if(parts[0]==="gForm"){STATE.gForm[parts[1]]=t.value;R();}
+    else if(parts[0]==="rForm"){STATE.rForm[parts[1]]=t.value;R();}
+    else if(parts[0]==="modalEmp"&&STATE.modalEmp){STATE.modalEmp[parts[1]]=t.value;R();}
+  }
+});
 </script>
 </body>
 </html>
