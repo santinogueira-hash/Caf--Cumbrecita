@@ -42,9 +42,9 @@ La pantalla **Hoy** junta todo lo del día: proveedores a los que toca pedir (se
 - Registrar al final de cada jornada las horas trabajadas y lo que hizo / dejó pendiente (**🗒 Bitácora**).
 
 ## Acceso a la app
-- Entra por **Administración** con su propio PIN (lo configura Santi en **Admin → 🧾 Administrativa → 👤 Rol**, donde también se define el monto límite de aprobación).
-- Ve solamente: Hoy, Pedidos, Recepción, Facturas, Pagos, Proveedores y Bitácora.
-- **No** ve caja, sueldos del personal, retiros, balance ni configuración.
+- La app de **Administración** se abre en el link del repositorio (GitHub Pages). Se puede agregar a la pantalla de inicio del celular.
+- Cada uno entra con su PIN: Santi con el suyo (por defecto `1234`, se cambia en **👤 Rol**) y Victoria con el que le asigne Santi.
+- Victoria ve: Hoy, Pedidos, Recepción, Facturas, Pagos, Proveedores y Bitácora. Solo Santi ve **👤 Rol** (configuración, PINes, monto límite y evaluación).
 - Santi puede deshabilitar el acceso en cualquier momento (casilla "Acceso habilitado" o estado "Finalizada").
 
 ## Rutina sugerida
