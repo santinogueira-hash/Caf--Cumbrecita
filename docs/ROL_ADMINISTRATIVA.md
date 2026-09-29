@@ -13,29 +13,37 @@
 
 ## Responsabilidades
 
+### 0. Empezar el día en 🏠 Hoy
+La pantalla **Hoy** junta todo lo del día: proveedores a los que toca pedir (según sus días y hora de corte), pedidos para enviar, entregas atrasadas o que llegan hoy, facturas vencidas o por vencer en 7 días, pagos programados y lo que espera aprobación de Santi.
+
 ### 1. Creación de pedidos
 - Revisar faltantes con el encargado del local (salón y cocina) según los días de pedido de cada proveedor.
-- Cargar cada pedido en la app (**📦 Pedidos**): proveedor, productos, cantidades y fecha estimada de entrega.
-- Enviar el pedido al proveedor y confirmar la entrega.
+- Cargar cada pedido en la app (**📦 Pedidos**): proveedor, productos, cantidades, precio estimado y fecha de entrega. Se puede **copiar el último pedido** del proveedor.
+- La app avisa si no llega al pedido mínimo.
+- Si el total supera el **monto límite** (por defecto $100.000), el pedido queda **esperando aprobación de Santi**.
+- Enviarlo con el botón **📲 WhatsApp** (arma el mensaje solo) y queda como "Enviado".
 - Seguir los pedidos **atrasados** (la app los marca en rojo).
 
 ### 2. Recepción de mercadería
 - Cuando llega un pedido, el personal del local le manda foto del remito/factura.
-- Victoria registra la recepción (**🚚 Recepción**): nº de remito, quién recibió, monto de la factura y cantidades realmente recibidas.
+- Victoria registra la recepción (**🚚 Recepción**): tipo y nº de comprobante, quién recibió, monto, **vencimiento** (se calcula con la condición de pago del proveedor) y cantidades realmente recibidas.
 - Si hay faltantes o mercadería en mal estado, lo anota en observaciones y lo reclama al proveedor. La app marca la recepción como "Con diferencias".
 
-### 3. Pagos a proveedores
-- Controlar la cuenta corriente de cada proveedor (**📒 Saldos**: facturado − pagado).
-- Registrar cada pago (**💳 Pagos**) con forma de pago y nº de comprobante, idealmente asociado a su factura.
-- Cada pago se carga automáticamente como gasto "Proveedores", así impacta en el Balance.
-- Pagos grandes o fuera de lo habitual: consultar antes con Santi.
+### 3. Facturas y pagos a proveedores
+- **🧾 Facturas**: facturas pendientes ordenadas por vencimiento y cuenta corriente por proveedor.
+- **💳 Pagos**: registrar un pago hecho hoy o **programarlo** para una fecha (Efectivo, Transferencia Galicia, Mercado Pago, Cheque, Tarjeta).
+- Cuando el pago se marca como pagado, se carga solo como gasto "Proveedores" en el Balance.
+- Pagos mayores al monto límite quedan esperando aprobación de Santi.
 
-### 4. Bitácora
+### 4. Proveedores
+- **🏪 Proveedores**: mantener la ficha de cada uno (contacto, WhatsApp, días de pedido, hora de corte, pedido mínimo, condición y medio de pago, CBU/alias).
+
+### 5. Bitácora
 - Registrar al final de cada jornada las horas trabajadas y lo que hizo / dejó pendiente (**🗒 Bitácora**).
 
 ## Acceso a la app
-- Entra por **Administración** con su propio PIN (lo configura Santi en **Admin → 🧾 Administrativa → 👤 Rol**).
-- Ve solamente: Pedidos, Recepción, Pagos, Saldos y Bitácora.
+- Entra por **Administración** con su propio PIN (lo configura Santi en **Admin → 🧾 Administrativa → 👤 Rol**, donde también se define el monto límite de aprobación).
+- Ve solamente: Hoy, Pedidos, Recepción, Facturas, Pagos, Proveedores y Bitácora.
 - **No** ve caja, sueldos del personal, retiros, balance ni configuración.
 - Santi puede deshabilitar el acceso en cualquier momento (casilla "Acceso habilitado" o estado "Finalizada").
 
