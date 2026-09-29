@@ -88,6 +88,13 @@ const GASTO_CATS=["Materias primas","Café especialidad","Proveedores","Personal
 const PROVEEDORES=["Aceite de oliva","Café","Cantón de las Sierras","Cordiez","Centeno","Chucrut","Don Ramón","Dulces","Especias","Fabeda","Frigorífico Nvo. Munich","Frutos Rojos","Frutos Secos","Helados","Hai","Hongos","Luconi","Maní","Nachos","Pasta","Pollo","Rancho Grande","Saan","Tulum","Verduleria Depósito","Verduleria Punto Verde","Santaolalla","Salsas El Taller","Cerveza BergBräu","Cerveza Wildermann","Saltetto","Vifood","Limonadas","Agua","Alfajores","Baguettes","Budines","Maria Pastelería","Odasso","Panificación de La Villa","Croissant","Scons","Tortas Jorge"];
 const CAT_COLOR={"Materias primas":"#10B981","Café especialidad":"#F59E0B","Personal":"#3B82F6","Servicios":"#8B5CF6","Alquiler":"#EF4444","Mantenimiento":"#F97316","Marketing":"#EC4899","Impuestos y tasas":"#6B7280"};
 const RETIRO_CATS=["Casa","Auto","Tarjetas de crédito","Almacén","Farmacia","Cuota alimentos","Combustible","Ropa","Salud","Educación","Entretenimiento","Otros"];
+// Rol administrativo (trabajo remoto): pedidos, recepción de mercadería y pagos a proveedores
+const ADM_DEFAULT={nombre:"Victoria",rol:"Asistente administrativa (remoto)",inicio:"2026-12-01",finPrueba:"2027-03-31",estado:"prueba",pin:"",honorarioMensual:0,accesoActivo:true,notasEvaluacion:""};
+const ADM_ESTADOS={prueba:"Período de prueba",efectiva:"Efectiva",finalizada:"Finalizada"};
+const ADM_ESTADO_COLOR={prueba:"#F59E0B",efectiva:"#10B981",finalizada:"#6B7280"};
+const UNIDADES=["u","kg","g","l","cajas","bultos","docenas","paquetes"];
+const PEDIDO_ESTADO={pendiente:"Pendiente",recibido:"Recibido",cancelado:"Cancelado"};
+const PEDIDO_COLOR={pendiente:"#F59E0B",recibido:"#10B981",cancelado:"#6B7280"};
 const MESES=["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const VAC_ANUALES=15, SEMANAS_ANIO=50, DIA_LIBRE=4;
 const JORNADA_REDUCIDA=["Trifon","Ceci"];
@@ -175,6 +182,10 @@ let STATE={
   editReg:null, histEmpId:null, checkinSel:null, checkinFeedback:null,
   // balance
   balMes:thisMonth(),
+  // administrativa
+  admCfg:{...ADM_DEFAULT}, pedidos:[], pagosProv:[], bitacora:[],
+  admSubTab:"pedidos", admCfgEdit:null, admCfgMsg:"",
+  admPed:null, admRecep:null, admPago:null, admLog:null, admFiltroProv:"",
 };
 
 const R=()=>render(document.getElementById("app"));
@@ -192,6 +203,13 @@ const saveRegistro=async(id,data)=>setDoc(doc(db,"registros",String(id)),{...dat
 const delRegistro=async id=>deleteDoc(doc(db,"registros",String(id)));
 const saveMovimiento=async(id,data)=>setDoc(doc(db,"movimientos",String(id)),{...data});
 const delMovimiento=async id=>deleteDoc(doc(db,"movimientos",String(id)));
+const saveAdmCfg=async data=>setDoc(doc(db,"config","administrativa"),{...data,updatedAt:new Date().toISOString()});
+const savePedido=async(id,data)=>setDoc(doc(db,"pedidos",String(id)),{...data});
+const delPedido=async id=>deleteDoc(doc(db,"pedidos",String(id)));
+const savePagoProv=async(id,data)=>setDoc(doc(db,"pagosProv",String(id)),{...data});
+const delPagoProv=async id=>deleteDoc(doc(db,"pagosProv",String(id)));
+const saveBitacora=async(id,data)=>setDoc(doc(db,"bitacora",String(id)),{...data});
+const delBitacora=async id=>deleteDoc(doc(db,"bitacora",String(id)));
 const savePin=p=>{localStorage.setItem("einkaffee_pin",p);STATE.pin=p;};
 
 // ── FIREBASE LISTENERS ────────────────────────────────────────────────────────
@@ -206,6 +224,10 @@ const initFirebase=async()=>{
   });
   onSnapshot(collection(db,"registros"),snap=>{STATE.registros=[];snap.forEach(s=>STATE.registros.push({id:s.id,...s.data()}));R();});
   onSnapshot(collection(db,"movimientos"),snap=>{STATE.movimientos=[];snap.forEach(s=>STATE.movimientos.push({id:s.id,...s.data()}));R();});
+  onSnapshot(doc(db,"config","administrativa"),s=>{STATE.admCfg={...ADM_DEFAULT,...(s.exists()?s.data():{})};R();});
+  onSnapshot(collection(db,"pedidos"),snap=>{STATE.pedidos=[];snap.forEach(s=>STATE.pedidos.push({id:s.id,...s.data()}));STATE.pedidos.sort((a,b)=>(a.fechaPedido||"")<(b.fechaPedido||"")?1:-1);R();});
+  onSnapshot(collection(db,"pagosProv"),snap=>{STATE.pagosProv=[];snap.forEach(s=>STATE.pagosProv.push({id:s.id,...s.data()}));STATE.pagosProv.sort((a,b)=>(a.fecha||"")<(b.fecha||"")?1:-1);R();});
+  onSnapshot(collection(db,"bitacora"),snap=>{STATE.bitacora=[];snap.forEach(s=>STATE.bitacora.push({id:s.id,...s.data()}));STATE.bitacora.sort((a,b)=>(a.fecha||"")<(b.fecha||"")?1:-1);R();});
 };
 initFirebase();
 
@@ -220,7 +242,9 @@ document.addEventListener("click",async e=>{
   else if(a==="go-login"){STATE.modo="login";STATE.pinInput="";STATE.pinError=false;R();}
   else if(a==="go-public"){STATE.modo="publico";STATE.pinInput="";STATE.pinError=false;R();}
   else if(a==="do-login"){
+    const c=STATE.admCfg;
     if(STATE.pinInput===STATE.pin){STATE.modo="admin";STATE.pinError=false;STATE.pinInput="";}
+    else if(c.pin&&STATE.pinInput===c.pin&&c.accesoActivo&&c.estado!=="finalizada"){STATE.modo="administrativa";STATE.admSubTab="pedidos";STATE.pinError=false;STATE.pinInput="";}
     else{STATE.pinError=true;STATE.pinInput="";}
     R();
   }
@@ -389,13 +413,14 @@ document.addEventListener("input",e=>{
 function render(el){
   if(STATE.modo==="publico")el.innerHTML=renderPublico();
   else if(STATE.modo==="login")el.innerHTML=renderLogin();
+  else if(STATE.modo==="administrativa")el.innerHTML=renderModoAdministrativa();
   else el.innerHTML=renderAdmin();
   attachSelects();
 }
 
 function attachSelects(){
   // Select changes (not covered by input event for select)
-  document.querySelectorAll("select[data-bind]").forEach(s=>{
+  document.querySelectorAll("select[data-bind]:not([data-bind^='adm'])").forEach(s=>{
     s.addEventListener("change",e=>{
       const parts=e.target.dataset.bind.split(".");
       if(parts[0]==="gForm")STATE.gForm[parts[1]]=e.target.value;
@@ -406,11 +431,11 @@ function attachSelects(){
   });
 }
 
-const header=(admin)=>`
+const header=(admin,sub)=>`
 <div style="text-align:center;margin-bottom:20px;position:relative">
   <div style="font-size:36px;margin-bottom:4px">☕</div>
   <p style="font-size:22px;font-weight:700;color:#F59E0B;text-transform:uppercase;letter-spacing:.15em;margin:0 0 4px">EINKAFFEE</p>
-  <p style="font-size:12px;color:#888;margin:0;letter-spacing:.05em">${admin?"La Cumbrecita — Admin":"La Cumbrecita"}</p>
+  <p style="font-size:12px;color:#888;margin:0;letter-spacing:.05em">${sub||(admin?"La Cumbrecita — Admin":"La Cumbrecita")}</p>
   ${admin?`<button data-action="go-public" class="btn-outline no-print" style="position:absolute;top:0;right:0;font-size:12px;padding:6px 12px;border-radius:8px">Salir</button>`:""}
   <span class="status" style="display:block;margin-top:6px;color:${STATE.connOk?"#10B981":"#EF4444"}">● ${STATE.connOk?"Conectado":"Sin conexión"}</span>
 </div>`;
@@ -446,8 +471,8 @@ function renderLogin(){
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
 function renderAdmin(){
-  const TABS=["☕ Caja","📋 Gastos","💸 Retiros","👥 Personal","📊 Balance","📈 Tendencias","🗂 Historial","⚙️ Config"];
-  const KEYS=["caja","gastos","retiros","personal","balance","tendencias","historial","config"];
+  const TABS=["☕ Caja","📋 Gastos","💸 Retiros","👥 Personal","📊 Balance","📈 Tendencias","🗂 Historial","🧾 Administrativa","⚙️ Config"];
+  const KEYS=["caja","gastos","retiros","personal","balance","tendencias","historial","administrativa","config"];
   let content="";
   if(STATE.adminTab==="caja")content=renderCaja();
   else if(STATE.adminTab==="gastos")content=renderGastos();
@@ -456,6 +481,7 @@ function renderAdmin(){
   else if(STATE.adminTab==="balance")content=renderBalance();
   else if(STATE.adminTab==="tendencias")content=renderTendencias();
   else if(STATE.adminTab==="historial")content=renderHistorial();
+  else if(STATE.adminTab==="administrativa")content=renderAdministrativa(true);
   else if(STATE.adminTab==="config")content=renderConfig();
   return `${header(true)}
   <div class="tabs-scroll no-print">
@@ -1192,6 +1218,364 @@ function renderModals(){
   }
   return html;
 }
+
+// ── ADMINISTRATIVA (rol remoto: pedidos, recepción, pagos) ────────────────────
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const diasEntre=(a,b)=>Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/86400000);
+const quienSoy=()=>STATE.modo==="administrativa"?(STATE.admCfg.nombre||"Administrativa"):"Admin";
+const pedidoTotalFactura=p=>p.recepcion?Number(p.recepcion.montoFactura)||0:0;
+const pagadoPedido=id=>STATE.pagosProv.filter(x=>x.pedidoId===id).reduce((s,x)=>s+(Number(x.monto)||0),0);
+const saldosProveedores=()=>{
+  const m={};
+  STATE.pedidos.filter(p=>p.estado==="recibido").forEach(p=>{m[p.proveedor]=m[p.proveedor]||{facturado:0,pagado:0};m[p.proveedor].facturado+=pedidoTotalFactura(p);});
+  STATE.pagosProv.forEach(x=>{m[x.proveedor]=m[x.proveedor]||{facturado:0,pagado:0};m[x.proveedor].pagado+=Number(x.monto)||0;});
+  return Object.entries(m).map(([proveedor,v])=>({proveedor,...v,saldo:v.facturado-v.pagado})).sort((a,b)=>b.saldo-a.saldo);
+};
+const nuevoPedido=()=>({proveedor:"",fechaPedido:today(),fechaEntrega:"",notas:"",items:[{producto:"",cantidad:"",unidad:"u"}]});
+const nuevoPago=(p)=>({fecha:today(),proveedor:p?.proveedor||"",pedidoId:p?.id||"",monto:p?String(Math.max(0,pedidoTotalFactura(p)-pagadoPedido(p.id))||""):"",medioPago:"Transferencia",comprobante:"",nota:""});
+const nuevoLog=()=>({fecha:today(),horas:"",tareas:""});
+
+const periodoInfo=()=>{
+  const c=STATE.admCfg,hoy=today();
+  if(c.estado==="finalizada")return{txt:"Colaboración finalizada",color:"#6B7280"};
+  if(c.estado==="efectiva")return{txt:`Efectiva desde ${c.efectivaDesde||"—"}`,color:"#10B981"};
+  if(hoy<c.inicio)return{txt:`Comienza el ${c.inicio} (faltan ${diasEntre(hoy,c.inicio)} días)`,color:"#3B82F6"};
+  if(hoy<=c.finPrueba){const tot=diasEntre(c.inicio,c.finPrueba),pas=diasEntre(c.inicio,hoy);return{txt:`Prueba: día ${pas+1} de ${tot+1} — quedan ${tot-pas} días (evaluación ${c.finPrueba})`,color:"#F59E0B",pct:Math.round(pas/tot*100)};}
+  return{txt:`Prueba terminada el ${c.finPrueba} — falta decidir si queda efectiva`,color:"#EF4444",pct:100};
+};
+
+// Vista que ve Victoria al entrar con su PIN
+function renderModoAdministrativa(){
+  const c=STATE.admCfg;
+  return `${header(true,`La Cumbrecita — ${esc(c.nombre)} · ${esc(c.rol)}`)}
+  ${renderAdministrativa(false)}
+  ${renderAdmModals()}`;
+}
+
+function renderAdministrativa(esDueno){
+  const SUBS=[["pedidos","📦 Pedidos"],["recepcion","🚚 Recepción"],["pagos","💳 Pagos"],["saldos","📒 Saldos"],["bitacora","🗒 Bitácora"],...(esDueno?[["rol","👤 Rol"]]:[])];
+  if(!SUBS.some(([k])=>k===STATE.admSubTab))STATE.admSubTab="pedidos";
+  const pi=periodoInfo(),c=STATE.admCfg;
+  let content="";
+  if(STATE.admSubTab==="pedidos")content=renderAdmPedidos();
+  else if(STATE.admSubTab==="recepcion")content=renderAdmRecepcion();
+  else if(STATE.admSubTab==="pagos")content=renderAdmPagos();
+  else if(STATE.admSubTab==="saldos")content=renderAdmSaldos();
+  else if(STATE.admSubTab==="bitacora")content=renderAdmBitacora();
+  else if(STATE.admSubTab==="rol")content=renderAdmRol();
+  return `<div class="card" style="border-left:3px solid ${pi.color}">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <div><p style="font-size:14px;font-weight:500;margin:0">${esc(c.nombre)} ${pill(ADM_ESTADOS[c.estado]||c.estado,ADM_ESTADO_COLOR[c.estado]||"#888")}</p>
+      <p style="font-size:12px;color:#888;margin:2px 0 0">${esc(c.rol)}</p></div>
+      <span style="font-size:12px;color:${pi.color};font-weight:500">${pi.txt}</span>
+    </div>
+    ${pi.pct!=null?`<div class="bar-track" style="margin-top:10px"><div class="bar-fill" style="width:${pi.pct}%;background:${pi.color}"></div></div>`:""}
+  </div>
+  <div class="tabs-scroll no-print" style="margin-bottom:14px">
+    ${SUBS.map(([k,l])=>`<button data-action="adm-sub" data-val="${k}" class="sub-btn ${STATE.admSubTab===k?"active":""}">${l}</button>`).join("")}
+  </div>
+  ${content}
+  ${esDueno?renderAdmModals():""}`;
+}
+
+function provSelect(bind,val){
+  return `<select data-bind="${bind}"><option value="">— Seleccioná —</option>${PROVEEDORES.map(p=>`<option ${val===p?"selected":""}>${esc(p)}</option>`).join("")}</select>`;
+}
+
+function renderAdmPedidos(){
+  const pend=STATE.pedidos.filter(p=>p.estado==="pendiente");
+  const f=STATE.admPed;
+  const form=f?`<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 14px">${f.id?"Editar":"Nuevo"} pedido</p>
+    <div style="margin-bottom:10px"><label class="lbl">Proveedor</label>${provSelect("admPed.proveedor",f.proveedor)}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Fecha pedido</label><input type="date" data-bind="admPed.fechaPedido" value="${f.fechaPedido}"></div>
+      <div><label class="lbl">Entrega estimada</label><input type="date" data-bind="admPed.fechaEntrega" value="${f.fechaEntrega}"></div>
+    </div>
+    <label class="lbl">Productos</label>
+    ${f.items.map((it,i)=>`<div style="display:grid;grid-template-columns:1fr 70px 90px 28px;gap:6px;margin-bottom:6px">
+      <input type="text" data-bind="admItem.${i}.producto" value="${esc(it.producto)}" placeholder="Producto">
+      <input type="number" data-bind="admItem.${i}.cantidad" value="${esc(it.cantidad)}" placeholder="Cant.">
+      <select data-bind="admItem.${i}.unidad">${UNIDADES.map(u=>`<option ${it.unidad===u?"selected":""}>${u}</option>`).join("")}</select>
+      <button data-action="adm-ped-del-item" data-val="${i}" class="del-btn">×</button>
+    </div>`).join("")}
+    <button data-action="adm-ped-add-item" class="btn-outline" style="width:100%;margin-bottom:10px">+ Agregar producto</button>
+    <div style="margin-bottom:14px"><label class="lbl">Notas</label><input type="text" data-bind="admPed.notas" value="${esc(f.notas)}" placeholder="Ej: pedido por WhatsApp, entregar martes"></div>
+    <div style="display:flex;gap:8px">
+      <button data-action="adm-ped-cancel" class="btn-outline" style="flex:1">Cancelar</button>
+      <button data-action="adm-ped-save" class="btn" style="flex:2;background:#3B82F6">Guardar pedido</button>
+    </div>
+  </div>`:`<button data-action="adm-ped-new" class="btn" style="width:100%;background:#3B82F6;margin-bottom:14px">+ Nuevo pedido</button>`;
+  const lista=STATE.pedidos.slice(0,30);
+  return `<div class="metrics">
+    ${metricCard("Pendientes",pend.length,"#F59E0B",pend.filter(p=>p.fechaEntrega&&p.fechaEntrega<today()).length+" atrasados")}
+    ${metricCard("Recibidos (mes)",STATE.pedidos.filter(p=>p.estado==="recibido"&&(p.recepcion?.fecha||"").startsWith(thisMonth())).length,"#10B981")}
+  </div>
+  ${form}
+  ${lista.length?`<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 12px">Pedidos</p>
+    ${lista.map(p=>`<div class="list-row" style="align-items:flex-start">
+      <div style="min-width:0">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span style="font-size:13px;font-weight:500">${esc(p.proveedor)}</span>${pill(PEDIDO_ESTADO[p.estado]||p.estado,PEDIDO_COLOR[p.estado]||"#888")}${p.estado==="pendiente"&&p.fechaEntrega&&p.fechaEntrega<today()?pill("Atrasado","#EF4444"):""}</div>
+        <p style="font-size:12px;color:#555;margin:2px 0">${(p.items||[]).map(it=>`${esc(it.cantidad)} ${esc(it.unidad)} ${esc(it.producto)}`).join(" · ")}</p>
+        <span style="font-size:11px;color:#aaa">Pedido ${p.fechaPedido||""}${p.fechaEntrega?` · entrega ${p.fechaEntrega}`:""} · por ${esc(p.creadoPor||"")}</span>
+        ${p.notas?`<p style="font-size:11px;color:#888;margin:2px 0 0">${esc(p.notas)}</p>`:""}
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        ${p.estado==="pendiente"?`<button data-action="adm-ped-edit" data-val="${p.id}" class="btn-outline" style="padding:3px 8px;font-size:11px">Editar</button><button data-action="adm-ped-cancelar" data-val="${p.id}" class="del-btn">Anular</button>`:""}
+        ${p.estado==="cancelado"?`<button data-action="adm-ped-del" data-val="${p.id}" class="del-btn">×</button>`:""}
+      </div>
+    </div>`).join("")}
+  </div>`:""}`;
+}
+
+function renderAdmRecepcion(){
+  const pend=STATE.pedidos.filter(p=>p.estado==="pendiente");
+  const rec=STATE.pedidos.filter(p=>p.estado==="recibido").sort((a,b)=>(a.recepcion?.fecha||"")<(b.recepcion?.fecha||"")?1:-1).slice(0,20);
+  return `<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 4px">Pendientes de recibir</p>
+    <p style="font-size:11px;color:#888;margin:0 0 10px">Cargá el remito/factura que te mandan desde el local (foto por WhatsApp) y marcá si llegó todo bien.</p>
+    ${pend.length?pend.map(p=>`<div class="list-row">
+      <div><span style="font-size:13px;font-weight:500">${esc(p.proveedor)}</span>
+      <p style="font-size:11px;color:#888;margin:0">${(p.items||[]).length} ítems · entrega ${p.fechaEntrega||"s/f"}</p></div>
+      <button data-action="adm-recep-open" data-val="${p.id}" class="btn" style="background:#10B981;padding:6px 12px;font-size:12px">Registrar recepción</button>
+    </div>`).join(""):`<p style="font-size:12px;color:#aaa">No hay pedidos pendientes.</p>`}
+  </div>
+  ${rec.length?`<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 12px">Últimas recepciones</p>
+    ${rec.map(p=>{const r=p.recepcion||{};return `<div class="list-row" style="align-items:flex-start">
+      <div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span style="font-size:13px;font-weight:500">${esc(p.proveedor)}</span>${r.conforme?pill("Conforme","#10B981"):pill("Con diferencias","#EF4444")}</div>
+      <span style="font-size:11px;color:#aaa">${r.fecha||""} · recibió ${esc(r.recibio||"—")} · remito ${esc(r.nroRemito||"—")}</span>
+      ${r.obs?`<p style="font-size:11px;color:#EF4444;margin:2px 0 0">${esc(r.obs)}</p>`:""}</div>
+      <span style="font-size:13px;font-weight:500">$${fmt(r.montoFactura)}</span>
+    </div>`;}).join("")}
+  </div>`:""}`;
+}
+
+function renderAdmPagos(){
+  const f=STATE.admPago;
+  const pedidosProv=f?STATE.pedidos.filter(p=>p.estado==="recibido"&&p.proveedor===f.proveedor&&pedidoTotalFactura(p)-pagadoPedido(p.id)>0):[];
+  const form=f?`<div class="card">
+    <p style="font-size:13px;font-weight:500;margin:0 0 4px">Registrar pago a proveedor</p>
+    <p style="font-size:11px;color:#888;margin:0 0 12px">Se carga automáticamente como gasto "Proveedores" y aparece en el Balance.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Fecha</label><input type="date" data-bind="admPago.fecha" value="${f.fecha}"></div>
+      <div><label class="lbl">Monto ($)</label><input type="number" data-bind="admPago.monto" value="${esc(f.monto)}" placeholder="0"></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="lbl">Proveedor</label>${provSelect("admPago.proveedor",f.proveedor)}</div>
+    ${f.proveedor?`<div style="margin-bottom:10px"><label class="lbl">Pedido / factura (opcional)</label><select data-bind="admPago.pedidoId"><option value="">— Pago a cuenta —</option>${pedidosProv.map(p=>`<option value="${p.id}" ${f.pedidoId===p.id?"selected":""}>${p.recepcion?.fecha||p.fechaPedido} · remito ${esc(p.recepcion?.nroRemito||"s/n")} · debe $${fmt(pedidoTotalFactura(p)-pagadoPedido(p.id))}</option>`).join("")}</select></div>`:""}
+    <div style="margin-bottom:10px"><label class="lbl">Forma de pago</label>
+      <div style="display:flex;gap:8px">${["Efectivo","Transferencia","Tarjeta"].map(m=>`<button data-action="adm-pago-medio" data-val="${m}" style="flex:1;padding:7px 0;font-size:12px;cursor:pointer;border-radius:10px;border:1.5px solid ${f.medioPago===m?"#3B82F6":"#e5e5e5"};background:${f.medioPago===m?"#EFF6FF":"#fafafa"};color:${f.medioPago===m?"#2563EB":"#888"}">${m}</button>`).join("")}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div><label class="lbl">Nº comprobante</label><input type="text" data-bind="admPago.comprobante" value="${esc(f.comprobante)}" placeholder="Transf./recibo"></div>
+      <div><label class="lbl">Nota</label><input type="text" data-bind="admPago.nota" value="${esc(f.nota)}"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button data-action="adm-pago-cancel" class="btn-outline" style="flex:1">Cancelar</button>
+      <button data-action="adm-pago-save" class="btn" style="flex:2;background:#10B981">Guardar pago</button>
+    </div>
+  </div>`:`<button data-action="adm-pago-new" class="btn" style="width:100%;background:#10B981;margin-bottom:14px">+ Registrar pago</button>`;
+  const mes=STATE.pagosProv.filter(x=>(x.fecha||"").startsWith(thisMonth()));
+  const deuda=saldosProveedores().reduce((s,x)=>s+Math.max(0,x.saldo),0);
+  return `<div class="metrics">
+    ${metricCard("Pagado este mes",moneda(mes.reduce((s,x)=>s+(Number(x.monto)||0),0)),"#10B981",mes.length+" pagos")}
+    ${metricCard("Deuda proveedores",moneda(deuda),"#EF4444")}
+  </div>
+  ${form}
+  ${STATE.pagosProv.length?`<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 12px">Últimos pagos</p>
+    ${STATE.pagosProv.slice(0,25).map(x=>`<div class="list-row">
+      <div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span style="font-size:13px;font-weight:500">${esc(x.proveedor)}</span>${pill(x.medioPago,"#3B82F6")}</div>
+      <span style="font-size:11px;color:#aaa">${x.fecha} · ${esc(x.comprobante||"s/comprobante")} · por ${esc(x.creadoPor||"")}</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;font-weight:500">$${fmt(x.monto)}</span><button data-action="adm-pago-del" data-val="${x.id}" class="del-btn">×</button></div>
+    </div>`).join("")}
+  </div>`:""}`;
+}
+
+function renderAdmSaldos(){
+  const s=saldosProveedores();
+  return `<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 4px">Cuenta corriente por proveedor</p>
+    <p style="font-size:11px;color:#888;margin:0 0 12px">Facturado (recepciones) menos pagado.</p>
+    ${s.length?s.map(x=>`<div class="list-row">
+      <div><span style="font-size:13px;font-weight:500">${esc(x.proveedor)}</span>
+      <p style="font-size:11px;color:#888;margin:0">Facturado $${fmt(x.facturado)} · Pagado $${fmt(x.pagado)}</p></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:14px;font-weight:500;color:${x.saldo>0?"#EF4444":x.saldo<0?"#3B82F6":"#10B981"}">${x.saldo>0?"Debe $"+fmt(x.saldo):x.saldo<0?"A favor $"+fmt(-x.saldo):"Al día"}</span>
+        ${x.saldo>0?`<button data-action="adm-pago-prov" data-val="${esc(x.proveedor)}" class="btn-outline" style="padding:3px 8px;font-size:11px">Pagar</button>`:""}
+      </div>
+    </div>`).join(""):`<p style="font-size:12px;color:#aaa">Todavía no hay movimientos.</p>`}
+  </div>`;
+}
+
+function renderAdmBitacora(){
+  const f=STATE.admLog;
+  const mes=STATE.bitacora.filter(b=>(b.fecha||"").startsWith(thisMonth()));
+  return `<div class="metrics">
+    ${metricCard("Horas este mes",fmtD(mes.reduce((s,b)=>s+(Number(b.horas)||0),0)),"#8B5CF6",mes.length+" días registrados")}
+  </div>
+  ${f?`<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 14px">Registrar jornada (trabajo remoto)</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Fecha</label><input type="date" data-bind="admLog.fecha" value="${f.fecha}"></div>
+      <div><label class="lbl">Horas</label><input type="number" step="0.5" data-bind="admLog.horas" value="${esc(f.horas)}" placeholder="0"></div>
+    </div>
+    <div style="margin-bottom:14px"><label class="lbl">Qué hiciste / pendientes</label><input type="text" data-bind="admLog.tareas" value="${esc(f.tareas)}" placeholder="Ej: pedidos de verdulería y café, pagué a Luconi"></div>
+    <div style="display:flex;gap:8px"><button data-action="adm-log-cancel" class="btn-outline" style="flex:1">Cancelar</button><button data-action="adm-log-save" class="btn" style="flex:2;background:#8B5CF6">Guardar</button></div>
+  </div>`:`<button data-action="adm-log-new" class="btn" style="width:100%;background:#8B5CF6;margin-bottom:14px">+ Registrar jornada</button>`}
+  ${STATE.bitacora.length?`<div class="card">${STATE.bitacora.slice(0,30).map(b=>`<div class="list-row">
+    <div><span style="font-size:13px;font-weight:500">${b.fecha}</span> <span style="font-size:12px;color:#8B5CF6">${fmtD(b.horas)} h</span>
+    <p style="font-size:12px;color:#555;margin:0">${esc(b.tareas)}</p></div>
+    <button data-action="adm-log-del" data-val="${b.id}" class="del-btn">×</button>
+  </div>`).join("")}</div>`:""}`;
+}
+
+// Solo dueño: configuración del rol y evaluación del período de prueba
+function renderAdmRol(){
+  if(!STATE.admCfgEdit)STATE.admCfgEdit={...STATE.admCfg};
+  const c=STATE.admCfgEdit;
+  const enPeriodo=x=>x>=STATE.admCfg.inicio&&x<=STATE.admCfg.finPrueba;
+  const peds=STATE.pedidos.filter(p=>enPeriodo(p.fechaPedido||""));
+  const recs=peds.filter(p=>p.estado==="recibido");
+  const conformes=recs.filter(p=>p.recepcion?.conforme).length;
+  const atrasados=STATE.pedidos.filter(p=>p.estado==="pendiente"&&p.fechaEntrega&&p.fechaEntrega<today()).length;
+  const pagos=STATE.pagosProv.filter(x=>enPeriodo(x.fecha||""));
+  const horas=STATE.bitacora.filter(b=>enPeriodo(b.fecha||"")).reduce((s,b)=>s+(Number(b.horas)||0),0);
+  const deuda=saldosProveedores().reduce((s,x)=>s+Math.max(0,x.saldo),0);
+  return `<div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 12px">Evaluación del período de prueba (${STATE.admCfg.inicio} → ${STATE.admCfg.finPrueba})</p>
+    <div class="metrics">${metricCard("Pedidos",peds.length,"#3B82F6",`${recs.length} recibidos`)}${metricCard("Recepción OK",recs.length?Math.round(conformes/recs.length*100)+"%":"—","#10B981",`${recs.length-conformes} con diferencias`)}</div>
+    <div class="metrics">${metricCard("Pagos",pagos.length,"#8B5CF6",moneda(pagos.reduce((s,x)=>s+(Number(x.monto)||0),0)))}${metricCard("Horas",fmtD(horas),"#F59E0B",`${atrasados} pedidos atrasados · deuda ${moneda(deuda)}`)}</div>
+  </div>
+  <div class="card"><p style="font-size:13px;font-weight:500;margin:0 0 14px">Rol y acceso</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Nombre</label><input type="text" data-bind="admCfgEdit.nombre" value="${esc(c.nombre)}"></div>
+      <div><label class="lbl">Estado</label><select data-bind="admCfgEdit.estado">${Object.entries(ADM_ESTADOS).map(([k,l])=>`<option value="${k}" ${c.estado===k?"selected":""}>${l}</option>`).join("")}</select></div>
+    </div>
+    <div style="margin-bottom:10px"><label class="lbl">Puesto</label><input type="text" data-bind="admCfgEdit.rol" value="${esc(c.rol)}"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Inicio</label><input type="date" data-bind="admCfgEdit.inicio" value="${c.inicio}"></div>
+      <div><label class="lbl">Fin de prueba</label><input type="date" data-bind="admCfgEdit.finPrueba" value="${c.finPrueba}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">PIN de acceso</label><input type="text" inputmode="numeric" data-bind="admCfgEdit.pin" value="${esc(c.pin)}" placeholder="4-8 dígitos"></div>
+      <div><label class="lbl">Honorario mensual ($)</label><input type="number" data-bind="admCfgEdit.honorarioMensual" value="${c.honorarioMensual||""}" placeholder="0"></div>
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:10px"><input type="checkbox" data-bind="admCfgEdit.accesoActivo" ${c.accesoActivo?"checked":""} style="width:auto"> Acceso habilitado</label>
+    <div style="margin-bottom:10px"><label class="lbl">Notas de evaluación</label><input type="text" data-bind="admCfgEdit.notasEvaluacion" value="${esc(c.notasEvaluacion)}" placeholder="Cómo viene, qué ajustar..."></div>
+    <p style="font-size:12px;margin:0 0 10px;color:${STATE.admCfgMsg.startsWith("✓")?"#10B981":"#EF4444"}">${esc(STATE.admCfgMsg)}</p>
+    <button data-action="adm-cfg-save" class="btn" style="width:100%;background:#3B82F6">Guardar</button>
+    <p style="font-size:11px;color:#aaa;margin:10px 0 0">Victoria entra desde "Administración" con su PIN y solo ve Pedidos, Recepción, Pagos, Saldos y Bitácora (no ve caja, sueldos, retiros ni balance).</p>
+  </div>`;
+}
+
+function renderAdmModals(){
+  const r=STATE.admRecep;if(!r)return "";
+  const p=STATE.pedidos.find(x=>x.id===r.pedidoId);if(!p)return "";
+  return `<div class="modal-overlay"><div class="modal-box">
+    <h3>Recepción — ${esc(p.proveedor)}</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div><label class="lbl">Fecha</label><input type="date" data-bind="admRecep.fecha" value="${r.fecha}"></div>
+      <div><label class="lbl">Nº remito/factura</label><input type="text" data-bind="admRecep.nroRemito" value="${esc(r.nroRemito)}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div><label class="lbl">Recibió en local</label><input type="text" data-bind="admRecep.recibio" value="${esc(r.recibio)}" placeholder="Nombre"></div>
+      <div><label class="lbl">Monto factura ($)</label><input type="number" data-bind="admRecep.montoFactura" value="${esc(r.montoFactura)}" placeholder="0"></div>
+    </div>
+    <label class="lbl">Cantidades recibidas</label>
+    ${(p.items||[]).map((it,i)=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+      <span style="flex:1;font-size:12px">${esc(it.producto)} <span style="color:#aaa">(pedido ${esc(it.cantidad)} ${esc(it.unidad)})</span></span>
+      <input type="number" data-bind="admRecepItem.${i}" value="${esc(r.recibidos[i])}" style="width:80px">
+    </div>`).join("")}
+    <div style="margin:10px 0"><label class="lbl">Observaciones (faltantes, mal estado...)</label><input type="text" data-bind="admRecep.obs" value="${esc(r.obs)}"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button data-action="adm-recep-close" class="btn-outline">Cancelar</button>
+      <button data-action="adm-recep-save" class="btn" style="background:#10B981;padding:8px 18px">Confirmar</button>
+    </div>
+  </div></div>`;
+}
+
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-action^='adm-']");if(!t)return;
+  const a=t.dataset.action,v=t.dataset.val;
+  if(a==="adm-sub"){STATE.admSubTab=v;if(v==="rol"){STATE.admCfgEdit={...STATE.admCfg};STATE.admCfgMsg="";}}
+  // pedidos
+  else if(a==="adm-ped-new")STATE.admPed=nuevoPedido();
+  else if(a==="adm-ped-cancel")STATE.admPed=null;
+  else if(a==="adm-ped-add-item")STATE.admPed.items.push({producto:"",cantidad:"",unidad:"u"});
+  else if(a==="adm-ped-del-item"){STATE.admPed.items.splice(Number(v),1);if(!STATE.admPed.items.length)STATE.admPed.items.push({producto:"",cantidad:"",unidad:"u"});}
+  else if(a==="adm-ped-edit"){const p=STATE.pedidos.find(x=>x.id===v);STATE.admPed=JSON.parse(JSON.stringify(p));}
+  else if(a==="adm-ped-save"){
+    const f=STATE.admPed,items=f.items.filter(it=>it.producto.trim());
+    if(!f.proveedor||!items.length)return;
+    const id=f.id||String(Date.now());
+    await savePedido(id,{...f,id,items,estado:f.estado||"pendiente",creadoPor:f.creadoPor||quienSoy(),creadoEn:f.creadoEn||new Date().toISOString()});
+    STATE.admPed=null;
+  }
+  else if(a==="adm-ped-cancelar"){const p=STATE.pedidos.find(x=>x.id===v);if(p&&confirm("¿Anular este pedido?"))await savePedido(v,{...p,estado:"cancelado"});}
+  else if(a==="adm-ped-del"){if(confirm("¿Eliminar el pedido anulado?"))await delPedido(v);}
+  // recepción
+  else if(a==="adm-recep-open"){const p=STATE.pedidos.find(x=>x.id===v);STATE.admRecep={pedidoId:v,fecha:today(),nroRemito:"",recibio:"",montoFactura:"",obs:"",recibidos:(p.items||[]).map(it=>it.cantidad)};}
+  else if(a==="adm-recep-close")STATE.admRecep=null;
+  else if(a==="adm-recep-save"){
+    const r=STATE.admRecep,p=STATE.pedidos.find(x=>x.id===r.pedidoId);
+    const items=(p.items||[]).map((it,i)=>({...it,recibido:r.recibidos[i]}));
+    const conforme=!r.obs.trim()&&items.every(it=>Number(it.recibido)===Number(it.cantidad));
+    await savePedido(p.id,{...p,items,estado:"recibido",recepcion:{fecha:r.fecha,nroRemito:r.nroRemito,recibio:r.recibio,montoFactura:Number(r.montoFactura)||0,obs:r.obs,conforme,cargadoPor:quienSoy()}});
+    STATE.admRecep=null;
+  }
+  // pagos
+  else if(a==="adm-pago-new")STATE.admPago=nuevoPago();
+  else if(a==="adm-pago-prov"){STATE.admSubTab="pagos";STATE.admPago={...nuevoPago(),proveedor:v};}
+  else if(a==="adm-pago-cancel")STATE.admPago=null;
+  else if(a==="adm-pago-medio")STATE.admPago.medioPago=v;
+  else if(a==="adm-pago-save"){
+    const f=STATE.admPago,monto=parseFloat(f.monto)||0;
+    if(!f.proveedor||!monto)return;
+    const id=String(Date.now()),gastoId="g"+id;
+    // El pago también se registra como gasto para que impacte en Balance
+    await saveGasto(gastoId,{id:gastoId,fecha:f.fecha,categoria:"Proveedores",proveedor:f.proveedor,descripcion:`Pago proveedor${f.comprobante?" · "+f.comprobante:""}${f.nota?" · "+f.nota:""}`,monto,tipo:"Variable",medioPago:f.medioPago,empleadoId:"",origen:"administrativa",pagoId:id});
+    await savePagoProv(id,{...f,id,monto,gastoId,creadoPor:quienSoy()});
+    STATE.admPago=null;
+  }
+  else if(a==="adm-pago-del"){
+    const x=STATE.pagosProv.find(p=>p.id===v);if(!x||!confirm("¿Eliminar el pago? También se borra el gasto asociado."))return;
+    if(x.gastoId)await delGasto(x.gastoId);
+    await delPagoProv(v);
+  }
+  // bitácora
+  else if(a==="adm-log-new")STATE.admLog=nuevoLog();
+  else if(a==="adm-log-cancel")STATE.admLog=null;
+  else if(a==="adm-log-save"){
+    const f=STATE.admLog;if(!f.tareas.trim()&&!Number(f.horas))return;
+    const id=String(Date.now());
+    await saveBitacora(id,{...f,id,horas:Number(f.horas)||0,creadoPor:quienSoy()});
+    STATE.admLog=null;
+  }
+  else if(a==="adm-log-del"){if(confirm("¿Eliminar registro?"))await delBitacora(v);}
+  // rol (solo dueño)
+  else if(a==="adm-cfg-save"){
+    if(STATE.modo!=="admin")return;
+    const c={...STATE.admCfgEdit};
+    if(c.pin&&!/^\d{4,8}$/.test(c.pin)){STATE.admCfgMsg="El PIN debe tener 4 a 8 dígitos.";R();return;}
+    if(c.pin&&c.pin===STATE.pin){STATE.admCfgMsg="El PIN no puede ser igual al del administrador.";R();return;}
+    if(c.estado==="efectiva"&&STATE.admCfg.estado!=="efectiva")c.efectivaDesde=today();
+    c.honorarioMensual=Number(c.honorarioMensual)||0;
+    await saveAdmCfg(c);
+    STATE.admCfgMsg="✓ Guardado";
+  }
+  R();
+});
+
+const admBind=(t,rerender)=>{
+  const b=t.dataset.bind;if(!b)return;
+  const[k,f,g]=b.split("."),val=t.type==="checkbox"?t.checked:t.value;
+  if(k==="admPed"&&STATE.admPed)STATE.admPed[f]=val;
+  else if(k==="admItem"&&STATE.admPed)STATE.admPed.items[Number(f)][g]=val;
+  else if(k==="admRecep"&&STATE.admRecep)STATE.admRecep[f]=val;
+  else if(k==="admRecepItem"&&STATE.admRecep)STATE.admRecep.recibidos[Number(f)]=val;
+  else if(k==="admPago"&&STATE.admPago){STATE.admPago[f]=val;if(f==="proveedor")STATE.admPago.pedidoId="";if(f==="pedidoId"&&val){const p=STATE.pedidos.find(x=>x.id===val);if(p)STATE.admPago.monto=String(pedidoTotalFactura(p)-pagadoPedido(p.id));}}
+  else if(k==="admLog"&&STATE.admLog)STATE.admLog[f]=val;
+  else if(k==="admCfgEdit"&&STATE.admCfgEdit)STATE.admCfgEdit[f]=val;
+  else return;
+  if(rerender)R();
+};
+document.addEventListener("input",e=>{if(e.target.tagName!=="SELECT"&&e.target.type!=="checkbox")admBind(e.target,false);});
+document.addEventListener("change",e=>{if(e.target.tagName==="SELECT"||e.target.type==="checkbox")admBind(e.target,true);});
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
 function metricCard(label,value,color,sub=""){
