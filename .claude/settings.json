@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Base44",
+      "mcp__Claude_Code_Remote__read_documentation",
+      "mcp__Claude_Code_Remote__send_later",
+      "ArtifactData",
+      "Artifact",
+      "WebSearch",
+      "WebFetch"
+    ]
+  }
+}
